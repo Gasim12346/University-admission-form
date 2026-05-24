@@ -131,7 +131,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 #لتحديد مكان المجلد حق css and js
-STATICFILES_DIRS = [BASE_DIR / 'backend'/'STATIC',]
+STATICFILES_DIRS = [BASE_DIR / 'static',]
 STATIC_ROOT = BASE_DIR /'staticfiles'
  
 # Default primary key field type

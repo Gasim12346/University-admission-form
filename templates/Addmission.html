@@ -1,0 +1,525 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التسجيل والتقديم - بوابة القبول</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'Css/main.css' %}">
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<body>
+
+    <!-- ============================
+         HEADER – Ministry branding
+    ============================= -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>وزارة التعليم العالي والبحث العلمي</h1>
+                <p>بوابة القبول الجامعي - الجامعات السودانية</p>
+            </div>
+            <nav class="nav">
+                <a href="{% url 'home' %}">الرئيسية</a>
+                <a href="{% url 'addmission' %}" class="active">التسجيل</a>
+                <a href="{% url 'daleel' %}">الدليل الإلكتروني</a>
+                <a href="{% url 'Result' %}">النتائج</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ============================
+         MAIN CONTENT
+    ============================= -->
+    <main class="main">
+        <div class="container">
+            <div class="form-container">
+                <h2 style="text-align:center; color:#000; margin-bottom:2rem;">استمارة التقديم الإلكتروني</h2>
+
+                {% if messages %}
+                <div style="margin-bottom:1rem;">
+                    {% for message in messages %}
+                    <div style="background:{% if message.tags == 'error' %}#fee2e2{% else %}#d1fae5{% endif %}; color:{% if message.tags == 'error' %}#991b1b{% else %}#065f46{% endif %}; padding:10px 16px; border-radius:8px; margin-bottom:6px; font-size:0.88rem;">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form id="registrationForm" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="choices_data" id="choices_data">
+
+                    <!-- ── Section 1 : Personal Info ── -->
+                    <div style="background:#f8f9fa; padding:1.5rem; border-radius:10px; margin-bottom:2rem;">
+                        <h3 style="margin-bottom:1rem; color:#1a3a6b;">البيانات الأساسية</h3>
+
+                        <div class="form-group">
+                            <label>الاسم الرباعي *</label>
+                            <input type="text" name="studentName" required placeholder="أدخل الاسم الكامل"
+                                   value="{{ form_data.studentName|default:'' }}">
+                        </div>
+
+                        <div class="two-col">
+                            <div class="form-group">
+                                <label>رقم الجلوس *</label>
+                                <input type="text" name="seatNumber" required
+                                       value="{{ form_data.seatNumber|default:'' }}">
+                            </div>
+                            <div class="form-group">
+                                <label>النسبة المئوية *</label>
+                                <input type="number" name="percentage" id="percentage"
+                                       step="0.01" min="0" max="100" required
+                                       value="{{ form_data.percentage|default:'' }}">
+                            </div>
+                        </div>
+
+                        <div class="two-col">
+                            <div class="form-group">
+                                <label>رقم الهاتف *</label>
+                                <input type="tel" name="phoneNumber" required
+                                       placeholder="مثال: 0912345678"
+                                       value="{{ form_data.phoneNumber|default:'' }}">
+                            </div>
+                            <div class="form-group">
+                                <label>البريد الإلكتروني *</label>
+                                <input type="email" name="emailAddress" required
+                                       placeholder="example@email.com"
+                                       value="{{ form_data.emailAddress|default:'' }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>المسار الدراسي *</label>
+                            <select id="fieldOfStudy" name="fieldOfStudy" required>
+                                <option value="">-- اختر المسار --</option>
+                                <optgroup label="المساق العلمي">
+                                    <option value="علمي-احياء">علمي-احياء</option>
+                                    <option value="علمي-هندسية">علمي-هندسية</option>
+                                    <option value="علمي-حاسوب">علمي-حاسوب</option>
+                                </optgroup>
+                                <optgroup label="المساق الأدبي">
+                                    <option value="ادبي-فنون">ادبي-فنون</option>
+                                    <option value="ادبي-دراسات اسلامية">ادبي-دراسات اسلامية</option>
+                                    <option value="ادبي-ادب انجليزي">ادبي-ادب انجليزي</option>
+                                    <option value="ادبي">ادبي</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- ── Section 2 : Choices ── -->
+                    <div style="background:#f8f9fa; padding:1.5rem; border-radius:10px; margin-bottom:2rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                            <h3 style="margin:0; color:#1a3a6b;">اختيار الرغبات</h3>
+                            <span id="choicesCountDisplay" style="font-weight:bold; color:#667eea;">0/20</span>
+                        </div>
+
+                        <div class="selection-tabs">
+                            <button type="button" id="manualTab" class="tab-btn active" onclick="switchMode('manual')">اختيار يدوي</button>
+                            <button type="button" id="aiTab"     class="tab-btn"        onclick="switchMode('ai')">الحصول على توصيات</button>
+                        </div>
+
+                        <!-- ── Manual Mode ── -->
+                        <div id="manualMode">
+
+                            <div class="form-group">
+                                <label>نوع القبول:</label>
+                                <div class="type-filter-group">
+                                    <div class="type-filter-btn active" data-type="" onclick="filterByType(this, '')">الكل</div>
+                                    <div class="type-filter-btn" data-type="حكومية" onclick="filterByType(this, 'حكومية')">حكومية</div>
+                                    <div class="type-filter-btn" data-type="أهلية"  onclick="filterByType(this, 'أهلية')">خاصة / أهلية</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>الجامعة:</label>
+                                <select id="universitySelect" class="js-searchable" style="width:100%" onchange="loadPrograms()">
+                                    <option value="">-- اختر الجامعة --</option>
+                                    {% for uni in universities %}
+                                        <option value="{{ uni.id }}" data-type="{{ uni.university_type }}">
+                                            {{ uni.name }} ({{ uni.university_type }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group" style="margin-top:15px;">
+                                <label>الكلية/التخصص:</label>
+                                <select id="programSelect" class="js-searchable" style="width:100%">
+                                    <option value="">-- اختر الجامعة أولاً --</option>
+                                </select>
+                            </div>
+
+                            <button type="button" onclick="addChoiceFromManual()"
+                                    class="btn" style="width:100%; margin-top:15px; background:#28a745; color:#fff;">
+                                إضافة الرغبة
+                            </button>
+                        </div>
+
+                        <!-- ── AI Mode ── -->
+                        <div id="aiMode" style="display:none;">
+                            <div style="background:#f0f4ff; padding:20px; border-radius:12px; border:1px solid #d1d5db;">
+                                <h4 style="margin-top:0; color:#1e40af;">المساعد الذكي</h4>
+
+                                <div class="form-group" style="margin-bottom:15px;">
+                                    <label>التخصص المطلوب:</label>
+                                    <input type="text" id="targetMajor" placeholder="مثلاً: طب، هندسة...">
+                                </div>
+
+                                <!-- ✅ حقل المدينة مع بحث Select2 -->
+                                <div class="form-group" style="margin-bottom:15px;">
+                                    <label>المنطقة التي تريد الدراسة فيها:</label>
+                                    <select id="preferredLocation" class="js-searchable" style="width:100%;">
+                                        <option value="">-- اختر الولاية/المدينة --</option>
+                                        <option value="أم درمان">أم درمان</option>
+                                        <option value="الابيض">الابيض</option>
+                                        <option value="البطانة">البطانة</option>
+                                        <option value="الجنينة">الجنينة</option>
+                                        <option value="الحصاحيصا">الحصاحيصا</option>
+                                        <option value="الخرطوم">الخرطوم</option>
+                                        <option value="الدلنج">الدلنج</option>
+                                        <option value="الدمازين">الدمازين</option>
+                                        <option value="الدويم">الدويم</option>
+                                        <option value="الروصيرص">الروصيرص</option>
+                                        <option value="السوكي">السوكي</option>
+                                        <option value="الضعين">الضعين</option>
+                                        <option value="العباسية تقلى">العباسية تقلى</option>
+                                        <option value="الفاشر">الفاشر</option>
+                                        <option value="الفولة">الفولة</option>
+                                        <option value="القضارف">القضارف</option>
+                                        <option value="الكاملين">الكاملين</option>
+                                        <option value="المجلد">المجلد</option>
+                                        <option value="المناقل">المناقل</option>
+                                        <option value="النهود">النهود</option>
+                                        <option value="ام درمان">ام درمان</option>
+                                        <option value="بحري">بحري</option>
+                                        <option value="بربر">بربر</option>
+                                        <option value="بورتسودان">بورتسودان</option>
+                                        <option value="تانوب">تانوب</option>
+                                        <option value="خرطوم بحري">خرطوم بحري</option>
+                                        <option value="خور طقت">خور طقت</option>
+                                        <option value="دلقو">دلقو</option>
+                                        <option value="دمازين">دمازين</option>
+                                        <option value="دنقلا">دنقلا</option>
+                                        <option value="ربك">ربك</option>
+                                        <option value="زالنجي">زالنجي</option>
+                                        <option value="سنار">سنار</option>
+                                        <option value="شندي">شندي</option>
+                                        <option value="عطبرة">عطبرة</option>
+                                        <option value="فداسي">فداسي</option>
+                                        <option value="كسلا">كسلا</option>
+                                        <option value="كوستي">كوستي</option>
+                                        <option value="مروي">مروي</option>
+                                        <option value="نيالا">نيالا</option>
+                                        <option value="وادي النيل">وادي النيل</option>
+                                        <option value="ود مدني">ود مدني</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:15px;">
+                                    <label>نوع القبول:</label>
+                                    <select id="modelType">
+                                        <option value="حكومية">حكومي</option>
+                                        <option value="أهلية">أهلي/خاص</option>
+                                    </select>
+                                </div>
+
+                                <button type="button" onclick="getAIRecommendations()"
+                                        style="width:100%; background:#4f46e5; color:white; padding:10px; border-radius:8px; border:none; cursor:pointer;">
+                                    توليد توصيات
+                                </button>
+                                <div id="aiResultsList" style="margin-top:20px; max-height:250px; overflow-y:auto;"></div>
+                            </div>
+                        </div>
+
+                        <!-- ── Choices List ── -->
+                        <div id="selectedChoicesList"
+                             style="margin-top:2rem; background:white; padding:1rem; border-radius:8px; border:1px solid #ddd; min-height:100px;">
+                            <p style="text-align:center; color:#999;">لم تضف أي رغبات بعد</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"
+                            style="width:100%; padding:1.2rem; font-size:1.2rem;">
+                        إرسال الطلب النهائي
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>جميع الحقوق محفوظة لوزارة التعليم العالي والبحث العلمي &copy; {% now "Y" %}</p>
+    </footer>
+
+    <script>
+    let finalChoices     = [];
+    let currentTypeFilter = '';
+
+    // ── Select2 init ──
+    $(document).ready(function () {
+        initSelect2();
+    });
+
+    function initSelect2() {
+        $('.js-searchable').select2({ dir: "rtl", language: { searching: function() { return 'جارٍ البحث...'; }, noResults: function() { return 'لا توجد نتائج'; } } });
+        // بحث مخصص لقائمة المدن
+        $('#preferredLocation').select2({ dir: 'rtl', placeholder: '🔍 ابحث عن مدينة...', allowClear: true, language: { searching: function() { return 'جارٍ البحث...'; }, noResults: function() { return 'لا توجد نتائج'; } } });
+    }
+
+    // ── Tab switcher ──
+    function switchMode(mode) {
+        $('#manualMode').toggle(mode === 'manual');
+        $('#aiMode').toggle(mode === 'ai');
+        $('#manualTab').toggleClass('active', mode === 'manual');
+        $('#aiTab').toggleClass('active', mode === 'ai');
+    }
+
+    // ── Admission-type filter ──
+    function filterByType(btn, type) {
+        document.querySelectorAll('.type-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTypeFilter = type;
+        $('#universitySelect').select2('destroy');
+        const opts = document.querySelectorAll('#universitySelect option[data-type]');
+        opts.forEach(opt => {
+            const match = !type || opt.dataset.type === type;
+            opt.style.display = match ? '' : 'none';
+            opt.disabled = !match;
+        });
+        $('#universitySelect').val('').trigger('change');
+        $('#programSelect').html('<option value="">-- اختر الجامعة أولاً --</option>');
+        initSelect2();
+    }
+
+    // ── Load programs on university change ──
+    function loadPrograms() {
+        const uniId = $('#universitySelect').val();
+        if (!uniId) return;
+        fetch(`/get-programs/?university_id=${uniId}`)
+            .then(res => res.json())
+            .then(data => {
+                let html = '<option value="">-- اختر التخصص --</option>';
+                data.forEach(p => { html += `<option value="${p.id}">${p.name}</option>`; });
+                $('#programSelect').select2('destroy').html(html);
+                initSelect2();
+            });
+    }
+
+    // ── Manual add ──
+    function addChoiceFromManual() {
+        const pId   = $('#programSelect').val();
+        const uName = $('#universitySelect option:selected').text();
+        const pName = $('#programSelect option:selected').text();
+        if (!pId) return alert("اختر الكلية أولاً");
+        executeAdd(parseInt(pId), pName, uName);
+    }
+
+    // ── AI recommendations — نموذج شجرة القرار ──
+    function getAIRecommendations() {
+        const pct   = $('#percentage').val();
+        const field = $('#fieldOfStudy').val();
+        const type  = $('#modelType').val();
+        const loc   = $('#preferredLocation').val().trim();
+        const major = $('#targetMajor').val().trim();
+
+        if (!pct)   return alert("الرجاء إدخال النسبة المئوية أولاً");
+        if (!loc)   return alert("الرجاء اختيار المدينة");
+        if (!major) return alert("الرجاء إدخال التخصص المطلوب");
+        if (!field) return alert("الرجاء اختيار المسار الدراسي");
+
+        const modelLabel = type === 'حكومية' ? 'القبول الحكومي' : 'القبول الأهلي';
+
+        $('#aiResultsList').html(
+            '<div style="text-align:center;padding:20px;color:#4f46e5">' +
+   
+            '<small style="color:#6b7280">جارٍ تحليل بياناتك وتوليد التوصيات...</small></p>' +
+            '</div>'
+        );
+
+        const url = window.location.origin + '/get-recommendations/'
+            + '?pct='      + encodeURIComponent(pct)
+            + '&field='    + encodeURIComponent(field)
+            + '&type='     + encodeURIComponent(type)
+            + '&location=' + encodeURIComponent(loc)
+            + '&major='    + encodeURIComponent(major);
+
+        fetch(url)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                // إذا أرجع خطأ
+                if (data && data.error) {
+                    $('#aiResultsList').html(
+                        '<div style="background:#fee2e2;border-radius:8px;padding:12px 16px;color:#991b1b;font-size:.85rem">' +
+                        '❌ ' + data.error + '</div>'
+                    );
+                    return;
+                }
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    $('#aiResultsList').html(
+                        '<div style="background:#fef3c7;border-radius:8px;padding:12px 16px;color:#92400e;font-size:.85rem">' +
+                        '⚠️ لم يتم العثور على توصيات مناسبة. جرّب تغيير التخصص أو المنطقة.</div>'
+                    );
+                    return;
+                }
+
+                window.tempAIResults = data;
+
+                // رأس النتائج
+                var primaryCount  = data.filter(function(d){ return !d.is_fallback; }).length;
+                var fallbackCount = data.filter(function(d){ return  d.is_fallback; }).length;
+
+                var html = '<div style="background:#eff6ff;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:.82rem;color:#1e40af">'
+                    + '🤖 <strong>نموذج شجرة القرار</strong> — ' + modelLabel
+                    + ' &nbsp;|&nbsp; توصيات مباشرة: <strong>' + primaryCount + '</strong>'
+                    + (fallbackCount > 0 ? ' &nbsp;|&nbsp; بدائل من مسارك: <strong>' + fallbackCount + '</strong>' : '')
+                    + '</div>';
+
+                data.forEach(function(item, index) {
+                    var isFallback  = item.is_fallback === true;
+                    var borderColor = isFallback ? '#6b7280' : (item.is_target ? '#16a34a' : '#4f46e5');
+                    var bgColor     = isFallback ? '#f9fafb' : (item.is_target ? '#f0fdf4' : '#fafafe');
+
+                    var badge;
+                    if (isFallback) {
+                        badge = '<span style="background:#f3f4f6;color:#6b7280;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:700"> </span>';
+                    } else if (item.is_target) {
+                        badge = '<span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:700"></span>';
+                    } else {
+                        badge = '<span style="background:#ede9fe;color:#4f46e5;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:700"></span>';
+                    }
+
+                    // شريط الاحتمالية — نخفيه للبدائل
+                    var probBar = (!isFallback && item.prob > 0)
+                        ? '<div style="margin-top:6px;background:#e5e7eb;border-radius:4px;height:5px;overflow:hidden">'
+                          + '<div style="background:' + borderColor + ';height:100%;width:' + Math.min(item.prob * 3, 100) + '%"></div>'
+                          + '</div>'
+                          + '<div style="font-size:.68rem;color:#9ca3af;margin-top:2px">ثقة النموذج: ' + item.prob + '%</div>'
+                        : '';
+
+                    html += '<div class="choice-item" style="border-right:5px solid ' + borderColor + ';background:' + bgColor + ';margin-bottom:8px;border-radius:8px;padding:10px 12px;display:flex;align-items:flex-start;gap:10px">'
+                        + '<div style="flex:1">'
+                        + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">'
+                        + '<strong style="color:#1e293b;font-size:.88rem">' + item.pName + '</strong>'
+                        + badge
+                        + '</div>'
+                        + '<div style="font-size:.78rem;color:#6b7280">' + item.uName + '</div>'
+                        + '<div style="font-size:.75rem;color:#9ca3af;margin-top:2px">الحد الأدنى: ' + item.min_score + '%</div>'
+                        + probBar
+                        + '</div>'
+                        + '<button type="button" '
+                        + 'style="background:' + (isFallback ? '#6b7280' : '#4f46e5') + ';color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8rem;flex-shrink:0;white-space:nowrap" '
+                        + 'onclick="addAISelection(' + index + ')">+ إضافة</button>'
+                        + '</div>';
+                });
+
+                $('#aiResultsList').html(html);
+            })
+            .catch(function() {
+                $('#aiResultsList').html(
+                    '<div style="background:#fee2e2;border-radius:8px;padding:12px 16px;color:#991b1b;font-size:.85rem">' +
+                    '❌ خطأ في الاتصال بالخادم. تأكد من الاتصال وأعد المحاولة.</div>'
+                );
+            });
+    }
+
+    function addAISelection(index) {
+        var item = window.tempAIResults[index];
+        if (!item) return;
+        executeAdd(item.id || 0, item.pName || '', item.uName || '');
+    }
+
+    // ✅ إصلاح رئيسي: executeAdd يحفظ id لا program_id
+    // (المشكلة كانت: executeAdd يحفظ {program_id, pName, uName}
+    //  لكن views.py يقرأ item.get('id') — الحل: نحفظ id)
+    function executeAdd(id, pName, uName) {
+        const isDuplicate = finalChoices.some(
+            c => c.pName.trim() === pName.trim() && c.uName.trim() === uName.trim()
+        );
+        if (isDuplicate) { alert("هذه الرغبة مضافة مسبقاً في قائمتك."); return; }
+        if (finalChoices.length >= 20) { alert("الحد الأقصى 20 رغبة."); return; }
+
+        // ✅ الحفظ بـ 'id' وليس 'program_id'
+        finalChoices.push({ id: id, pName: pName.trim(), uName: uName.trim() });
+        renderChoices();
+    }
+
+    // ── Render choices list ──
+    function renderChoices() {
+        const list      = $('#selectedChoicesList');
+        const userTrack = $('#fieldOfStudy').val();
+        const SCIENTIFIC = ['طب','هندسة','صيدلة','مختبرات','تمريض','اسنان','علوم','حاسوب','تقانة'];
+
+        list.html(finalChoices.length
+            ? ''
+            : '<p style="text-align:center; color:#999;">لم تضف أي رغبات بعد</p>');
+
+        finalChoices.forEach((c, i) => {
+            const isInvalid = (userTrack && userTrack.includes('ادبي'))
+                && SCIENTIFIC.some(k => c.pName.includes(k));
+
+            list.append(`
+                <div class="choice-item" style="${isInvalid ? 'border-right-color:red;' : ''}">
+                    <div style="flex:1;">
+                        <b>#${i+1}</b> ${c.uName} - ${c.pName}
+                        ${isInvalid ? '<span class="error-text">⚠ تخصص علمي لمسار أدبي</span>' : ''}
+                    </div>
+                    <div style="display:flex; gap:5px;">
+                        <button type="button" onclick="moveChoice(${i},-1)" ${i===0?'disabled':''}>▲</button>
+                        <button type="button" onclick="moveChoice(${i}, 1)" ${i===finalChoices.length-1?'disabled':''}>▼</button>
+                        <button type="button" onclick="removeChoice(${i})" style="color:red">✕</button>
+                    </div>
+                </div>`);
+        });
+
+        $('#choicesCountDisplay').text(`${finalChoices.length}/20`);
+        // ✅ الـ JSON المحفوظ يحتوي على 'id' وهو ما يقرأه views.py
+        $('#choices_data').val(JSON.stringify(finalChoices));
+    }
+
+    function moveChoice(index, direction) {
+        const target = index + direction;
+        if (target < 0 || target >= finalChoices.length) return;
+        [finalChoices[index], finalChoices[target]] = [finalChoices[target], finalChoices[index]];
+        renderChoices();
+    }
+
+    function removeChoice(i) {
+        finalChoices.splice(i, 1);
+        renderChoices();
+    }
+
+    // ── Form validation before submit ──
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        const phone = document.querySelector('input[name="phoneNumber"]').value.trim();
+        const email = document.querySelector('input[name="emailAddress"]').value.trim();
+        const phoneRegex = /^[0-9]{9,15}$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!phoneRegex.test(phone)) {
+            e.preventDefault();
+            alert('الرجاء إدخال رقم هاتف صحيح (أرقام فقط، 9-15 خانة)');
+            return;
+        }
+        if (!emailRegex.test(email)) {
+            e.preventDefault();
+            alert('الرجاء إدخال بريد إلكتروني صحيح');
+            return;
+        }
+        if (finalChoices.length === 0) {
+            e.preventDefault();
+            alert('الرجاء إضافة رغبة واحدة على الأقل');
+            return;
+        }
+        // تأكد من تحديث choices_data قبل الإرسال
+        $('#choices_data').val(JSON.stringify(finalChoices));
+    });
+    </script>
+</body>
+</html>
