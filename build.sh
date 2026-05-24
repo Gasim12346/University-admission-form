@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
-# Exit on error
+# exit on error
 set -o errexit
 
-# Install dependencies
+# تثبيت المكتبات
 pip install -r requirements.txt
 
-# Collect static files and migrate database
+# تجميع ملفات الستاتيك والـ CSS
 python manage.py collectstatic --no-input
+
+# تشغيل الـ Migrate لربط جداول دجانغو بسيرفر Aiven
 python manage.py migrate
+
+# إنشاء حساب المدير تلقائياً دون الحاجة لكتابة بيانات في الـ Shell
+if [ "$DJANGO_SUPERUSER_USERNAME" ]; then
+  python manage.py createsuperuser --no-input || true
+fi
