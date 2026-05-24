@@ -1,0 +1,101 @@
+{% load static %}  <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتائج القبول - بوابة القبول</title>
+      <link rel="stylesheet" href="{% static 'Css/main.css' %}">
+ <script src="{% static 'js/main.js' %}"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+  <div class="logo">
+                <h1>وزارة التعليم العالي والبحث العلمي</h1>
+                <p>بوابة القبول الجامعي - الجامعات السودانية</p>
+            </div>
+                     <nav class="nav">
+                <a href="{% url 'home' %}">الرئيسية</a>
+                <a href="{% url 'addmission' %}" >التسجيل</a>
+                <a href="{% url 'daleel' %}" >الدليل الإلكتروني</a>
+                <a href="{% url 'Result' %}"  class="active">النتائج</a>
+                
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="form-container">
+                <h2 style="text-align: center; color: #000000; margin-bottom: 2rem;">الاستعلام عن نتائج القبول</h2>
+                
+                <div id="alertContainer"></div>
+
+                <div class="form-group">
+                    <label for="formNumber">رقم الاستمارة *</label>
+                    <input type="text" id="formNumber" placeholder="أدخل رقم الاستمارة الخاص بك">
+                </div>
+
+                <button type="button" id="checkResultBtn" class="btn btn-primary" style="width: 100%;">
+                    استعلم عن النتيجة
+                </button>
+
+                <div id="resultContainer" style="display: none; margin-top: 2rem;"></div>
+            </div>
+        </div>
+    </main>
+  
+    <footer>
+        <p>جميع الحقوق محفوظة لوزارة التعليم العالي والبحث العلمي &copy; {% now "Y" %}</p>
+    </footer>
+
+ <script>
+document.getElementById('checkResultBtn').addEventListener('click', function() {
+    const formNumber = document.getElementById('formNumber').value;
+    const resultContainer = document.getElementById('resultContainer');
+    const alertContainer = document.getElementById('alertContainer');
+
+    if (!formNumber) {
+        alertContainer.innerHTML = '<div style="color: red; text-align: center;">يرجى إدخال رقم الاستمارة</div>';
+        return;
+    }
+
+    // تم التأكد من أن المفتاح هو form_no ليطابق الـ Backend
+    fetch(`/check-result-api/?form_no=${formNumber}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alertContainer.innerHTML = '';
+                resultContainer.style.display = 'block';
+                
+                // تم تعديل المسميات هنا لتطابق استجابة الـ JSON من السيرفر
+                let htmlContent = `
+                    <div style="background: #eafaf1; padding: 20px; border-radius: 8px; border: 1px solid #2ecc71;">
+                        <h3 style="color: #2c3e50;">اسم الطالب: ${data.student_name}</h3>
+                        <p>حالة الطلب: <strong>${data.application_status}</strong></p>
+                `;
+
+                if (data.accepted_program) {
+                    htmlContent += `
+                        <h2 style="color: #27ae60; margin-top:15px;">الكلية: ${data.accepted_program}</h2>
+                        <h3 style="color: #2c3e50;">الجامعة: ${data.university_name}</h3>
+                    `;
+                } else {
+                    htmlContent += `<p style="color: #e67e22; margin-top:15px; font-weight:bold;">عذراً، لم يتم ترشيحك لأي كلية حتى الآن.</p>`;
+                }
+
+                htmlContent += `</div>`;
+                resultContainer.innerHTML = htmlContent;
+            } else {
+                resultContainer.style.display = 'none';
+                alertContainer.innerHTML = `<div style="color: red; text-align: center;">عذراً، لم يتم العثور على بيانات لهذا الرقم.</div>`;
+            }
+        })
+        .catch(error => {
+            alertContainer.innerHTML = `<div style="color: red; text-align: center;">حدث خطأ في الاتصال بالخادم</div>`;
+            console.error('Error:', error);
+        });
+});
+</script>
+</body>
+</html>
