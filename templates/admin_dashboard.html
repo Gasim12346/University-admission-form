@@ -8,332 +8,341 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#1a3a6b;--accent:#4f46e5;--green:#16a34a;--red:#dc2626;--orange:#ea580c;--yellow:#ca8a04;--bg:#f0f4f8;--card:#ffffff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--sidebar-w:260px}
+:root{--navy:#1a3a6b;--accent:#4f46e5;--green:#16a34a;--red:#dc2626;--orange:#ea580c;--yellow:#ca8a04;--bg:#f0f4f8;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--sw:260px}
 body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex}
-.sidebar{width:var(--sidebar-w);background:var(--navy);min-height:100vh;position:fixed;right:0;top:0;bottom:0;display:flex;flex-direction:column;z-index:100;box-shadow:-4px 0 20px rgba(0,0,0,.15)}
-.sidebar-logo{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,.1)}
-.sidebar-logo h2{color:#fff;font-size:1rem;font-weight:700;line-height:1.4}
-.sidebar-logo p{color:rgba(255,255,255,.5);font-size:.75rem;margin-top:4px}
-.sidebar-nav{flex:1;padding:16px 0;overflow-y:auto}
-.nav-label{padding:8px 20px;font-size:.68rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;margin-top:8px}
-.nav-item{display:flex;align-items:center;gap:12px;padding:12px 20px;color:rgba(255,255,255,.7);font-size:.9rem;transition:all .2s;cursor:pointer;border:none;background:none;width:100%;text-align:right}
-.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
-.nav-item.active{background:var(--accent);color:#fff}
-.sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.1)}
-.sidebar-footer a{color:rgba(255,255,255,.5);font-size:.8rem;text-decoration:none}
-.main-wrapper{margin-right:var(--sidebar-w);flex:1;display:flex;flex-direction:column}
-.topbar{background:var(--card);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
-.topbar-title{font-size:1.15rem;font-weight:700;color:var(--navy)}
-.content{padding:28px;flex:1}
-.tab-content{display:none}
-.tab-content.active{display:block}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px}
-.stat-card{background:var(--card);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-right:4px solid var(--accent)}
-.stat-card.g{border-right-color:var(--green)} .stat-card.r{border-right-color:var(--red)} .stat-card.o{border-right-color:var(--orange)} .stat-card.y{border-right-color:var(--yellow)}
-.stat-label{font-size:.78rem;color:var(--muted)} .stat-value{font-size:2rem;font-weight:800;color:var(--navy);line-height:1} .stat-sub{font-size:.72rem;color:var(--muted)}
-.card{background:var(--card);border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:20px}
-.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
-.card-title{font-size:1rem;font-weight:700;color:var(--navy)}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-table{width:100%;border-collapse:collapse;font-size:.875rem}
-th{background:#f8fafc;padding:10px 14px;text-align:right;font-weight:600;color:var(--muted);font-size:.78rem;border-bottom:2px solid var(--border);white-space:nowrap}
-td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+/* SIDEBAR */
+.sb{width:var(--sw);background:var(--navy);min-height:100vh;position:fixed;right:0;top:0;bottom:0;display:flex;flex-direction:column;z-index:100;box-shadow:-4px 0 20px rgba(0,0,0,.15)}
+.sb-logo{padding:22px 18px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sb-logo h2{color:#fff;font-size:.95rem;font-weight:700;line-height:1.4}
+.sb-logo p{color:rgba(255,255,255,.45);font-size:.72rem;margin-top:3px}
+.sb-nav{flex:1;padding:12px 0;overflow-y:auto}
+.nav-lbl{padding:8px 18px;font-size:.65rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1px;margin-top:6px}
+.ni{display:flex;align-items:center;gap:10px;padding:11px 18px;color:rgba(255,255,255,.7);font-size:.88rem;cursor:pointer;border:none;background:none;width:100%;text-align:right;transition:all .2s}
+.ni:hover{background:rgba(255,255,255,.08);color:#fff}
+.ni.active{background:var(--accent);color:#fff}
+.sb-foot{padding:14px 18px;border-top:1px solid rgba(255,255,255,.1)}
+.sb-foot a{color:rgba(255,255,255,.45);font-size:.78rem;text-decoration:none}
+/* MAIN */
+.main{margin-right:var(--sw);flex:1;display:flex;flex-direction:column}
+.topbar{background:var(--card);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.topbar-title{font-size:1.1rem;font-weight:700;color:var(--navy)}
+.content{padding:24px;flex:1}
+.tab{display:none}.tab.active{display:block}
+/* STATS */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:24px}
+.sc{background:var(--card);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-right:4px solid var(--accent)}
+.sc.g{border-right-color:var(--green)}.sc.r{border-right-color:var(--red)}.sc.o{border-right-color:var(--orange)}.sc.y{border-right-color:var(--yellow)}
+.sl{font-size:.75rem;color:var(--muted)}.sv{font-size:1.9rem;font-weight:800;color:var(--navy);line-height:1}.ss{font-size:.7rem;color:var(--muted)}
+/* CARD */
+.card{background:var(--card);border-radius:10px;padding:22px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:18px}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.ct{font-size:.95rem;font-weight:700;color:var(--navy)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th{background:#f8fafc;padding:9px 12px;text-align:right;font-weight:600;color:var(--muted);font-size:.75rem;border-bottom:2px solid var(--border);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:hover td{background:#f8fafc}
-.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600}
-.b-p{background:#fef3c7;color:#92400e} .b-a{background:#d1fae5;color:#065f46} .b-r{background:#fee2e2;color:#991b1b}
-.b-g{background:#dbeafe;color:#1e40af} .b-pr{background:#fce7f3;color:#9d174d}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .2s;text-decoration:none}
-.btn-primary{background:var(--accent);color:#fff} .btn-success{background:var(--green);color:#fff}
-.btn-danger{background:var(--red);color:#fff} .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
-.btn-sm{padding:5px 10px;font-size:.78rem}
-.filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
-.filter-row input,.filter-row select{padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:.85rem;background:var(--card);color:var(--text)}
-/* ── Modal ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:var(--card);border-radius:16px;padding:28px;max-width:580px;width:92%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-.modal-title{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:6px}
-.modal-sub{font-size:.82rem;color:var(--muted);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)}
-.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:14px;border-top:1px solid var(--border)}
-.fg{margin-bottom:14px} .fg label{display:block;font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:6px}
-.fg input,.fg select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:.88rem;color:var(--text)}
-/* ── Choice cards in modal ── */
-.choice-card{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;border:2px solid var(--border);margin-bottom:8px;cursor:pointer;transition:all .2s}
-.choice-card:hover{border-color:var(--accent);background:#f5f3ff}
-.choice-card.selected{border-color:var(--green);background:#f0fdf4}
-.choice-rank{width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0}
-.choice-info{flex:1}
-.choice-prog{font-weight:600;font-size:.88rem;color:var(--text)}
-.choice-uni{font-size:.76rem;color:var(--muted)}
-.choice-check{color:var(--green);font-size:1.2rem;opacity:0}
-.choice-card.selected .choice-check{opacity:1}
-/* ── Dist result table ── */
-.dist-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:12px}
-.dist-table th{background:#f8fafc;padding:8px 12px;text-align:right;color:var(--muted);font-weight:600;border-bottom:2px solid var(--border)}
-.dist-table td{padding:8px 12px;border-bottom:1px solid var(--border)}
-.dist-table tr.accepted td{background:#f0fdf4}
-.dist-table tr.skipped td{background:#fefce8}
-/* ── Spinner ── */
-.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-left:6px}
-@keyframes spin{to{transform:rotate(360deg)}}
-/* ── Toast ── */
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:12px;font-size:.9rem;z-index:999;transition:transform .3s;white-space:nowrap}
-#toast.show{transform:translateX(-50%) translateY(0)} #toast.success{background:var(--green)} #toast.error{background:var(--red)}
-.chart-box{position:relative;height:220px}
-.empty{text-align:center;padding:48px 0;color:var(--muted)}
-.info-box{border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:.85rem}
-.info-box.blue{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
-.info-box.yellow{background:#fef3c7;border:1px solid #f59e0b;color:#92400e}
-@media(max-width:768px){.sidebar{display:none}.main-wrapper{margin-right:0}.grid-2{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(2,1fr)}}
+/* BADGES */
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.7rem;font-weight:600}
+.bp{background:#fef3c7;color:#92400e}.ba{background:#d1fae5;color:#065f46}.br{background:#fee2e2;color:#991b1b}
+.bg{background:#dbeafe;color:#1e40af}.bpr{background:#fce7f3;color:#9d174d}
+/* BTNS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:7px;border:none;cursor:pointer;font-size:.82rem;font-weight:600;transition:all .2s;text-decoration:none}
+.btn-p{background:var(--accent);color:#fff}.btn-g{background:var(--green);color:#fff}
+.btn-d{background:var(--red);color:#fff}.btn-o{background:var(--orange);color:#fff}
+.btn-gh{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-sm{padding:4px 9px;font-size:.74rem}
+/* FILTERS */
+.fr{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.fr input,.fr select{padding:7px 11px;border:1px solid var(--border);border-radius:7px;font-size:.82rem;background:var(--card);color:var(--text)}
+.fr input:focus,.fr select:focus{outline:none;border-color:var(--accent)}
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center}
+.mo.open{display:flex}
+.modal{background:var(--card);border-radius:14px;padding:26px;max-width:560px;width:92%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.mt{font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:5px}
+.ms{font-size:.8rem;color:var(--muted);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.mf{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+.fg{margin-bottom:12px}.fg label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:5px}
+.fg input,.fg select,.fg textarea{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:7px;font-size:.86rem;color:var(--text)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--accent)}
+.fgr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* TOAST */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(100px);background:#1e293b;color:#fff;padding:11px 22px;border-radius:10px;font-size:.88rem;z-index:999;transition:transform .3s;white-space:nowrap}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.s{background:var(--green)}#toast.e{background:var(--red)}
+/* CHART */
+.cb{position:relative;height:210px}
+/* PAGINATION */
+.pag{display:flex;align-items:center;gap:6px;margin-top:12px;justify-content:center}
+.pag button{padding:5px 12px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-size:.8rem}
+.pag button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pag button:disabled{opacity:.4;cursor:default}
+/* EMPTY */
+.empty{text-align:center;padding:40px;color:var(--muted)}
+/* REPORT CARD */
+.rep-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:18px}
+.rep-card{background:var(--card);border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-top:3px solid var(--accent);cursor:pointer;transition:transform .15s}
+.rep-card:hover{transform:translateY(-2px)}
+.rep-card h4{color:var(--navy);margin-bottom:6px;font-size:.9rem}
+.rep-card p{font-size:.78rem;color:var(--muted)}
+.rep-card .ri{font-size:2rem;margin-bottom:10px}
+/* INFO BOX */
+.ib{border-radius:7px;padding:10px 14px;margin-bottom:14px;font-size:.83rem}
+.ib.blue{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
+.ib.yellow{background:#fef3c7;border:1px solid #f59e0b;color:#92400e}
+@media(max-width:768px){.sb{display:none}.main{margin-right:0}.g2{grid-template-columns:1fr}.sg{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <h2> وزارة التعليم العالي</h2>
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo">
+    <h2>🎓 وزارة التعليم العالي</h2>
     <p>لوحة تحكم المسؤول</p>
   </div>
-  <nav class="sidebar-nav">
-    <div class="nav-label">الرئيسية</div>
-    <button class="nav-item active" onclick="switchTab('overview',this)"> لوحة الإحصاءات</button>
-    <div class="nav-label">إدارة الطلبات</div>
-    <button class="nav-item" onclick="switchTab('applications',this)"> طلبات التقديم</button>
-    <button class="nav-item" onclick="switchTab('students',this)">الطلاب</button>
-    <div class="nav-label">إدارة البيانات</div>
-    <button class="nav-item" onclick="switchTab('universities',this)"> الجامعات والتخصصات</button>
-    <div class="nav-label">أدوات النظام</div>
-    <button class="nav-item" onclick="switchTab('distribution',this)">نظام التوزيع</button>
+  <nav class="sb-nav">
+    <div class="nav-lbl">الرئيسية</div>
+    <button class="ni active" onclick="go('overview',this)">📊 لوحة الإحصاءات</button>
+    <div class="nav-lbl">إدارة الطلبات</div>
+    <button class="ni" onclick="go('applications',this)">📋 طلبات التقديم</button>
+    <button class="ni" onclick="go('students',this)">👤 الطلاب</button>
+    <button class="ni" onclick="go('acceptance',this)">✅ قرارات القبول</button>
+    <div class="nav-lbl">إدارة البيانات</div>
+    <button class="ni" onclick="go('universities',this)">🏛️ الجامعات والتخصصات</button>
+    <div class="nav-lbl">التقارير والتصدير</div>
+    <button class="ni" onclick="go('reports',this)">📈 التقارير</button>
+    <div class="nav-lbl">أدوات النظام</div>
+    <button class="ni" onclick="go('distribution',this)">⚙️ نظام التوزيع</button>
   </nav>
-  <div class="sidebar-footer"><a href="{% url 'home' %}">← العودة للموقع</a></div>
+  <div class="sb-foot"><a href="{% url 'home' %}">← العودة للموقع</a></div>
 </aside>
 
-<div class="main-wrapper">
+<!-- MAIN -->
+<div class="main">
   <div class="topbar">
     <div class="topbar-title" id="pageTitle">لوحة الإحصاءات</div>
-    <button class="btn btn-ghost btn-sm" onclick="refreshStats()"> تحديث</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-gh btn-sm" onclick="refreshStats()">🔄 تحديث</button>
+    </div>
   </div>
-
   <div class="content">
 
-    <!-- ══ TAB: Overview ══ -->
-    <div id="tab-overview" class="tab-content active">
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-label">إجمالي الطلبات</div><div class="stat-value" id="s-total">{{ stats.total_applications }}</div><div class="stat-sub">طلب مسجل</div></div>
-        <div class="stat-card y"><div class="stat-label">قيد المراجعة</div><div class="stat-value" id="s-pending">{{ stats.pending }}</div><div class="stat-sub">في انتظار القرار</div></div>
-        <div class="stat-card g"><div class="stat-label">مقبول</div><div class="stat-value" id="s-accepted">{{ stats.accepted }}</div><div class="stat-sub">طالب مقبول</div></div>
-        <div class="stat-card r"><div class="stat-label">مرفوض</div><div class="stat-value" id="s-rejected">{{ stats.rejected }}</div><div class="stat-sub">طلب مرفوض</div></div>
-        <div class="stat-card o"><div class="stat-label">متوسط النسبة</div><div class="stat-value" id="s-avg">{{ stats.avg_percentage }}</div><div class="stat-sub">%</div></div>
-        <div class="stat-card"><div class="stat-label">مطابقة الرغبات</div><div class="stat-value" id="s-match">{{ stats.match_percentage }}</div><div class="stat-sub">%</div></div>
-      </div>
-      <div class="grid-2">
-        <div class="card"><div class="card-header"><div class="card-title">توزيع الحالات</div></div><div class="chart-box"><canvas id="statusChart"></canvas></div></div>
-        <div class="card"><div class="card-header"><div class="card-title">توزيع المسارات</div></div><div class="chart-box"><canvas id="trackChart"></canvas></div></div>
-      </div>
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header"><div class="card-title"> أكثر الجامعات طلباً</div></div>
-          <table><thead><tr><th>#</th><th>الجامعة</th><th>عدد الرغبات</th></tr></thead><tbody>
-          {% for u in top_universities %}
-          <tr><td>{{ forloop.counter }}</td><td>{{ u.program__university__name }}</td><td><strong>{{ u.count }}</strong></td></tr>
-          {% empty %}<tr><td colspan="3" style="text-align:center;color:var(--muted)">لا توجد بيانات</td></tr>{% endfor %}
-          </tbody></table>
-        </div>
-        <div class="card">
-          <div class="card-header"><div class="card-title"> أكثر التخصصات طلباً</div></div>
-          <table><thead><tr><th>#</th><th>التخصص</th><th>الجامعة</th><th>عدد</th></tr></thead><tbody>
-          {% for p in top_programs %}
-          <tr><td>{{ forloop.counter }}</td><td>{{ p.program__name }}</td><td style="font-size:.78rem;color:var(--muted)">{{ p.program__university__name }}</td><td><strong>{{ p.count }}</strong></td></tr>
-          {% empty %}<tr><td colspan="4" style="text-align:center;color:var(--muted)">لا توجد بيانات</td></tr>{% endfor %}
-          </tbody></table>
-        </div>
-      </div>
+<!-- ══ TAB: Overview ══ -->
+<div id="tab-overview" class="tab active">
+  <div class="sg">
+    <div class="sc"><div class="sl">إجمالي الطلبات</div><div class="sv" id="s-total">{{ stats.total_applications }}</div><div class="ss">طلب</div></div>
+    <div class="sc y"><div class="sl">قيد المراجعة</div><div class="sv" id="s-pending">{{ stats.pending }}</div><div class="ss">في الانتظار</div></div>
+    <div class="sc g"><div class="sl">مقبول</div><div class="sv" id="s-accepted">{{ stats.accepted }}</div><div class="ss">طالب</div></div>
+    <div class="sc r"><div class="sl">مرفوض</div><div class="sv" id="s-rejected">{{ stats.rejected }}</div><div class="ss">طلب</div></div>
+    <div class="sc o"><div class="sl">متوسط النسبة</div><div class="sv" id="s-avg">{{ stats.avg_percentage }}</div><div class="ss">%</div></div>
+    <div class="sc"><div class="sl">مطابقة الرغبات</div><div class="sv" id="s-match">{{ stats.match_percentage }}</div><div class="ss">%</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ch"><div class="ct">توزيع الحالات</div></div><div class="cb"><canvas id="statusChart"></canvas></div></div>
+    <div class="card"><div class="ch"><div class="ct">توزيع المسارات</div></div><div class="cb"><canvas id="trackChart"></canvas></div></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><div class="ct">🏆 أكثر الجامعات طلباً</div></div>
+      <table><thead><tr><th>#</th><th>الجامعة</th><th>عدد الرغبات</th></tr></thead><tbody>
+      {% for u in top_universities %}<tr><td>{{ forloop.counter }}</td><td>{{ u.program__university__name }}</td><td><strong>{{ u.count }}</strong></td></tr>{% empty %}<tr><td colspan="3" style="text-align:center;color:var(--muted)">لا توجد بيانات</td></tr>{% endfor %}
+      </tbody></table>
     </div>
-
-    <!-- ══ TAB: Applications ══ -->
-    <div id="tab-applications" class="tab-content">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title"> طلبات التقديم</div>
-          <span style="font-size:.82rem;color:var(--muted)">إجمالي: {{ applications|length }} طلب</span>
-        </div>
-        <div class="filter-row">
-          <input type="text" id="searchInput" placeholder="🔍 بحث بالاسم أو رقم الجلوس..." oninput="filterTable()" style="flex:1;min-width:200px">
-          <select id="statusFilter" onchange="filterTable()">
-            <option value="">كل الحالات</option>
-            <option value="يتم المراجعة">قيد المراجعة</option>
-            <option value="تم القبول">مقبول</option>
-            <option value="مرفوض">مرفوض</option>
-          </select>
-          <select id="trackFilter" onchange="filterTable()">
-            <option value="">كل المسارات</option>
-            {% for t in track_distribution %}
-            <option value="{{ t.field_of_study }}">{{ t.field_of_study }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div style="overflow-x:auto">
-          <table id="appTable">
-            <thead>
-              <tr>
-                <th>رقم الاستمارة</th><th>الاسم</th><th>رقم الجلوس</th>
-                <th>النسبة</th><th>المسار</th><th>الحالة</th>
-                <th>البرنامج المقبول</th><th>التاريخ</th><th>إجراءات</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for app in applications %}
-              <tr
-                data-status="{{ app.status }}"
-                data-track="{{ app.student.field_of_study }}"
-                data-name="{{ app.student.name }}"
-                data-seat="{{ app.student.seat_number }}"
-                data-form="{{ app.student.form_number }}"
-                data-appid="{{ app.id }}"
-                data-pct="{{ app.student.percentage }}"
-              >
-                <td><code style="font-size:.8rem">{{ app.student.form_number }}</code></td>
-                <td><strong>{{ app.student.name }}</strong></td>
-                <td>{{ app.student.seat_number }}</td>
-                <td><strong>{{ app.student.percentage }}%</strong></td>
-                <td style="font-size:.78rem">{{ app.student.field_of_study }}</td>
-                <td class="status-cell">
-                  {% if app.status == 'تم القبول' %}<span class="badge b-a">{{ app.status }}</span>
-                  {% elif app.status == 'مرفوض' %}<span class="badge b-r">{{ app.status }}</span>
-                  {% else %}<span class="badge b-p">{{ app.status }}</span>{% endif %}
-                </td>
-                <td class="prog-cell" style="font-size:.8rem">
-                  {% if app.accepted_program %}
-                    <strong>{{ app.accepted_program.name }}</strong><br>
-                    <span style="color:var(--muted)">{{ app.accepted_program.university.name }}</span>
-                  {% else %}<span style="color:var(--muted)">—</span>{% endif %}
-                </td>
-                <td style="font-size:.78rem;color:var(--muted)">{{ app.created_at|date:"Y/m/d" }}</td>
-                <td>
-                  <div style="display:flex;gap:4px;flex-wrap:wrap">
-                    <button class="btn btn-success btn-sm" onclick="openAcceptModal(this)" title="قبول يدوي">✅ قبول</button>
-                    <button class="btn btn-ghost btn-sm" onclick="openStatusModal(this)" title="تغيير الحالة">✏️</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteApp(this)" title="حذف">🗑️</button>
-                  </div>
-                </td>
-              </tr>
-              {% empty %}
-              <tr><td colspan="9"><div class="empty"><div style="font-size:3rem">📭</div><p>لا توجد طلبات</p></div></td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ TAB: Students ══ -->
-    <div id="tab-students" class="tab-content">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">👤 قائمة الطلاب</div>
-          <span style="font-size:.82rem;color:var(--muted)">إجمالي: {{ applications|length }} طالب</span>
-        </div>
-        <div class="filter-row">
-          <input type="text" id="studentSearch" placeholder="🔍 بحث..." oninput="filterStudents()" style="flex:1">
-        </div>
-        <div style="overflow-x:auto">
-          <table id="studentsTable">
-            <thead>
-              <tr><th>رقم الاستمارة</th><th>الاسم</th><th>رقم الجلوس</th><th>النسبة</th><th>المسار</th><th>الهاتف</th><th>البريد</th><th>التاريخ</th></tr>
-            </thead>
-            <tbody>
-              {% for app in applications %}
-              <tr data-name="{{ app.student.name }}" data-seat="{{ app.student.seat_number }}" data-form="{{ app.student.form_number }}">
-                <td><code style="font-size:.8rem">{{ app.student.form_number }}</code></td>
-                <td><strong>{{ app.student.name }}</strong></td>
-                <td>{{ app.student.seat_number }}</td>
-                <td><strong style="color:var(--navy)">{{ app.student.percentage }}%</strong></td>
-                <td>{{ app.student.field_of_study }}</td>
-                <td style="font-size:.8rem">{{ app.student.phone_number|default:"—" }}</td>
-                <td style="font-size:.8rem">{{ app.student.email_address|default:"—" }}</td>
-                <td style="font-size:.78rem;color:var(--muted)">{{ app.created_at|date:"Y/m/d" }}</td>
-              </tr>
-              {% empty %}
-              <tr><td colspan="8"><div class="empty"><div style="font-size:3rem">👤</div><p>لا يوجد طلاب</p></div></td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ TAB: Universities ══ -->
-    <div id="tab-universities" class="tab-content">
-      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
-        <div class="stat-card"><div class="stat-label">إجمالي الجامعات</div><div class="stat-value">{{ total_universities }}</div></div>
-        <div class="stat-card"><div class="stat-label">إجمالي التخصصات</div><div class="stat-value">{{ total_programs }}</div></div>
-        <div class="stat-card g"><div class="stat-label">حكومية</div><div class="stat-value">{{ gov_count }}</div></div>
-        <div class="stat-card o"><div class="stat-label">أهلية / خاصة</div><div class="stat-value">{{ private_count }}</div></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title"> قائمة الجامعات</div></div>
-        <div style="overflow-x:auto">
-          <table>
-            <thead><tr><th>#</th><th>الجامعة</th><th>المنطقة</th><th>النوع</th><th>التخصصات</th><th>عينة</th></tr></thead>
-            <tbody>
-              {% for uni in universities %}
-              <tr>
-                <td>{{ forloop.counter }}</td>
-                <td><strong>{{ uni.name }}</strong></td>
-                <td>{{ uni.region }}</td>
-                <td>{% if uni.university_type == 'حكومية' %}<span class="badge b-g">{{ uni.university_type }}</span>{% else %}<span class="badge b-pr">{{ uni.university_type }}</span>{% endif %}</td>
-                <td>{{ uni.programs.count }}</td>
-                <td style="font-size:.78rem;color:var(--muted);max-width:280px">
-                  {% for prog in uni.programs.all|slice:":3" %}{{ prog.name }}{% if not forloop.last %}، {% endif %}{% endfor %}
-                  {% if uni.programs.count > 3 %}...{% endif %}
-                </td>
-              </tr>
-              {% empty %}
-              <tr><td colspan="6"><div class="empty"><div style="font-size:3rem">🏛️</div><p>لا توجد جامعات</p></div></td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ TAB: Distribution ══ -->
-    <div id="tab-distribution" class="tab-content">
-      <div class="card">
-        <div class="card-header"><div class="card-title"> نظام التوزيع التلقائي</div></div>
-        <div class="info-box blue">
-
-        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px">
-          <button class="btn btn-success" id="distBtn" onclick="executeDistribution()"> تنفيذ التوزيع التلقائي</button>
-          <button class="btn btn-danger" onclick="resetDistribution()"> إعادة تعيين التوزيع</button>
-        </div>
-        <div id="distResult"></div>
-      </div>
-    </div>
-
-  </div><!-- /content -->
-</div><!-- /main-wrapper -->
-
-<!-- ══════════ MODAL: قبول يدوي ══════════ -->
-<div class="modal-overlay" id="acceptModal">
-  <div class="modal">
-    <div class="modal-title">✅ قبول يدوي للطالب</div>
-    <div class="modal-sub" id="acceptModalSub">اختر أحد البرامج التالية من رغبات الطالب</div>
-    <div id="acceptChoicesList">
-      <p style="text-align:center;color:var(--muted);padding:20px 0">جارٍ تحميل الرغبات...</p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('acceptModal')">إلغاء</button>
-      <button class="btn btn-success" id="confirmAcceptBtn" onclick="confirmManualAccept()" disabled>✅ تأكيد القبول</button>
+    <div class="card">
+      <div class="ch"><div class="ct">📚 أكثر التخصصات طلباً</div></div>
+      <table><thead><tr><th>#</th><th>التخصص</th><th>الجامعة</th><th>عدد</th></tr></thead><tbody>
+      {% for p in top_programs %}<tr><td>{{ forloop.counter }}</td><td>{{ p.program__name }}</td><td style="font-size:.75rem;color:var(--muted)">{{ p.program__university__name }}</td><td><strong>{{ p.count }}</strong></td></tr>{% empty %}<tr><td colspan="4" style="text-align:center;color:var(--muted)">لا توجد بيانات</td></tr>{% endfor %}
+      </tbody></table>
     </div>
   </div>
 </div>
 
-<!-- ══════════ MODAL: تغيير الحالة ══════════ -->
-<div class="modal-overlay" id="statusModal">
+<!-- ══ TAB: Applications ══ -->
+<div id="tab-applications" class="tab">
+  <div class="card">
+    <div class="ch">
+      <div class="ct">📋 طلبات التقديم</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-o btn-sm" onclick="exportCSV('applications')">⬇️ تصدير CSV</button>
+        <button class="btn btn-p btn-sm" onclick="exportPDF('applications')">📄 تصدير PDF</button>
+      </div>
+    </div>
+    <div class="fr">
+      <input type="text" id="appSearch" placeholder="🔍 بحث..." oninput="filterApps()" style="flex:1;min-width:180px">
+      <select id="appStatus" onchange="filterApps()">
+        <option value="">كل الحالات</option>
+        <option value="يتم المراجعة">قيد المراجعة</option>
+        <option value="تم القبول">مقبول</option>
+        <option value="مرفوض">مرفوض</option>
+      </select>
+      <select id="appTrack" onchange="filterApps()">
+        <option value="">كل المسارات</option>
+        {% for t in track_distribution %}<option value="{{ t.field_of_study }}">{{ t.field_of_study }}</option>{% endfor %}
+      </select>
+    </div>
+    <div style="overflow-x:auto">
+      <table id="appTable">
+        <thead><tr><th>الاستمارة</th><th>الاسم</th><th>رقم الجلوس</th><th>النسبة</th><th>المسار</th><th>الحالة</th><th>البرنامج المقبول</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+        <tbody>
+        {% for app in applications %}
+        <tr data-status="{{ app.status }}" data-track="{{ app.student.field_of_study }}" data-name="{{ app.student.name }}" data-seat="{{ app.student.seat_number }}" data-form="{{ app.student.form_number }}" data-appid="{{ app.id }}">
+          <td><code style="font-size:.76rem">{{ app.student.form_number }}</code></td>
+          <td><strong>{{ app.student.name }}</strong></td>
+          <td>{{ app.student.seat_number }}</td>
+          <td><strong>{{ app.student.percentage }}%</strong></td>
+          <td style="font-size:.75rem">{{ app.student.field_of_study }}</td>
+          <td class="status-cell">
+            {% if app.status == 'تم القبول' %}<span class="badge ba">{{ app.status }}</span>
+            {% elif app.status == 'مرفوض' %}<span class="badge br">{{ app.status }}</span>
+            {% else %}<span class="badge bp">{{ app.status }}</span>{% endif %}
+          </td>
+          <td class="prog-cell" style="font-size:.78rem">{% if app.accepted_program %}<strong>{{ app.accepted_program.name }}</strong><br><span style="color:var(--muted)">{{ app.accepted_program.university.name }}</span>{% else %}<span style="color:var(--muted)">—</span>{% endif %}</td>
+          <td style="font-size:.75rem;color:var(--muted)">{{ app.created_at|date:"Y/m/d" }}</td>
+          <td>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <button class="btn btn-g btn-sm" onclick="openAcceptModal(this)" title="قبول يدوي">✅ قبول</button>
+              <button class="btn btn-gh btn-sm" onclick="openStatusModal(this)" title="تغيير الحالة">✏️</button>
+              <button class="btn btn-d btn-sm" onclick="deleteApp(this)" title="حذف">🗑️</button>
+            </div>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="9"><div class="empty">📭 لا توجد طلبات</div></td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB: Students ══ -->
+<div id="tab-students" class="tab">
+  <div class="card">
+    <div class="ch">
+      <div class="ct">👤 إدارة الطلاب</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-g btn-sm" onclick="openAddStudentModal()">➕ إضافة طالب</button>
+        <button class="btn btn-o btn-sm" onclick="exportCSV('students')">⬇️ تصدير CSV</button>
+        <button class="btn btn-p btn-sm" onclick="exportPDF('students')">📄 تصدير PDF</button>
+      </div>
+    </div>
+    <div class="fr">
+      <input type="text" id="stuSearch" placeholder="🔍 بحث بالاسم أو رقم الجلوس..." oninput="loadStudents()" style="flex:1;min-width:180px">
+    </div>
+    <div style="overflow-x:auto">
+      <table id="stuTable">
+        <thead><tr><th>رقم الاستمارة</th><th>الاسم</th><th>رقم الجلوس</th><th>النسبة</th><th>المسار</th><th>الهاتف</th><th>البريد</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+        <tbody id="stuBody"><tr><td colspan="9" style="text-align:center;color:var(--muted);padding:20px">جارٍ التحميل...</td></tr></tbody>
+      </table>
+    </div>
+    <div class="pag" id="stuPag"></div>
+  </div>
+</div>
+
+<!-- ══ TAB: Acceptance ══ -->
+<div id="tab-acceptance" class="tab">
+  <div class="card">
+    <div class="ch"><div class="ct">✅ قرارات القبول</div></div>
+    <div class="ib yellow">⚠️ ابحث عن طالب وحدد البرنامج الذي سيُقبل به من رغباته.</div>
+    <div class="fr">
+      <input type="text" id="acceptInput" placeholder="🔍 ابحث برقم الجلوس أو رقم الاستمارة..." style="flex:1">
+      <button class="btn btn-p" onclick="searchAcceptance()">بحث</button>
+    </div>
+    <div id="acceptResult"></div>
+  </div>
+</div>
+
+<!-- ══ TAB: Universities ══ -->
+<div id="tab-universities" class="tab">
+  <div class="sg" style="grid-template-columns:repeat(4,1fr)">
+    <div class="sc"><div class="sl">إجمالي الجامعات</div><div class="sv">{{ total_universities }}</div></div>
+    <div class="sc"><div class="sl">إجمالي التخصصات</div><div class="sv">{{ total_programs }}</div></div>
+    <div class="sc g"><div class="sl">حكومية</div><div class="sv">{{ gov_count }}</div></div>
+    <div class="sc o"><div class="sl">أهلية / خاصة</div><div class="sv">{{ private_count }}</div></div>
+  </div>
+  <div class="card">
+    <div class="ch">
+      <div class="ct">🏛️ إدارة الجامعات والتخصصات</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-g btn-sm" onclick="openUniModal('add')">➕ إضافة جامعة</button>
+        <button class="btn btn-o btn-sm" onclick="exportCSV('universities')">⬇️ تصدير CSV</button>
+        <button class="btn btn-p btn-sm" onclick="exportPDF('universities')">📄 تصدير PDF</button>
+      </div>
+    </div>
+    <div id="uniList">جارٍ التحميل...</div>
+  </div>
+</div>
+
+<!-- ══ TAB: Reports ══ -->
+<div id="tab-reports" class="tab">
+  <div class="rep-grid">
+    <div class="rep-card" onclick="loadReport('summary')">
+      <div class="ri">📊</div>
+      <h4>تقرير شامل</h4>
+      <p>إحصاءات عامة وملخص النظام</p>
+    </div>
+    <div class="rep-card" onclick="loadReport('tracks')">
+      <div class="ri">📚</div>
+      <h4>توزيع المسارات</h4>
+      <p>إحصاءات القبول حسب المسار الدراسي</p>
+    </div>
+    <div class="rep-card" onclick="loadReport('universities')">
+      <div class="ri">🏛️</div>
+      <h4>إحصاءات الجامعات</h4>
+      <p>أعداد الطلاب والطلبات لكل جامعة</p>
+    </div>
+    <div class="rep-card" onclick="loadReport('accepted')">
+      <div class="ri">✅</div>
+      <h4>قائمة المقبولين</h4>
+      <p>جميع الطلاب المقبولين مع تفاصيلهم</p>
+    </div>
+    <div class="rep-card" onclick="loadReport('score_dist')">
+      <div class="ri">📈</div>
+      <h4>توزيع النسب</h4>
+      <p>توزيع نسب الطلاب على الفئات</p>
+    </div>
+  </div>
+  <div id="reportArea"></div>
+</div>
+
+<!-- ══ TAB: Distribution ══ -->
+<div id="tab-distribution" class="tab">
+  <div class="card">
+    <div class="ch"><div class="ct">⚙️ نظام التوزيع التلقائي</div></div>
+    <div class="ib blue"><strong>📌</strong> يرتّب النظام الطلاب تنازلياً ويقبل كل طالب في أول رغبة مناسبة. بعد التنفيذ يُحدَّث الجدول فوراً.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">
+      <button class="btn btn-g" id="distBtn" onclick="execDist()">▶️ تنفيذ التوزيع التلقائي</button>
+      <button class="btn btn-d" onclick="resetDist()">🔄 إعادة التعيين</button>
+    </div>
+    <div id="distResult"></div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+<!-- ═══════════ MODALS ═══════════ -->
+
+<!-- قبول يدوي -->
+<div class="mo" id="acceptModal">
   <div class="modal">
-    <div class="modal-title">✏️ تحديث حالة الطلب</div>
-    <div class="modal-sub" id="statusModalSub"></div>
+    <div class="mt">✅ قبول يدوي</div>
+    <div class="ms" id="acceptModalSub"></div>
+    <div id="acceptChoices"><p style="text-align:center;color:var(--muted)">جارٍ التحميل...</p></div>
+    <div class="mf">
+      <button class="btn btn-gh" onclick="closeMo('acceptModal')">إلغاء</button>
+      <button class="btn btn-g" id="confirmAcceptBtn" onclick="confirmAccept()" disabled>✅ تأكيد القبول</button>
+    </div>
+  </div>
+</div>
+
+<!-- تغيير حالة -->
+<div class="mo" id="statusModal">
+  <div class="modal">
+    <div class="mt">✏️ تحديث الحالة</div>
+    <div class="ms" id="statusModalSub"></div>
     <div class="fg">
       <label>الحالة الجديدة</label>
       <select id="newStatus">
@@ -342,314 +351,660 @@ tr:hover td{background:#f8fafc}
         <option value="مرفوض">مرفوض</option>
       </select>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('statusModal')">إلغاء</button>
-      <button class="btn btn-primary" onclick="confirmStatus()">حفظ</button>
+    <div class="mf">
+      <button class="btn btn-gh" onclick="closeMo('statusModal')">إلغاء</button>
+      <button class="btn btn-p" onclick="confirmStatus()">حفظ</button>
     </div>
   </div>
 </div>
 
+<!-- تعديل طالب -->
+<div class="mo" id="editStuModal">
+  <div class="modal">
+    <div class="mt" id="editStuTitle">تعديل بيانات الطالب</div>
+    <div class="ms" id="editStuSub"></div>
+    <div class="fgr">
+      <div class="fg"><label>الاسم الرباعي *</label><input type="text" id="stu_name"></div>
+      <div class="fg"><label>رقم الجلوس *</label><input type="text" id="stu_seat"></div>
+    </div>
+    <div class="fgr">
+      <div class="fg"><label>النسبة %</label><input type="number" id="stu_pct" step="0.01" min="0" max="100"></div>
+      <div class="fg"><label>المسار</label>
+        <select id="stu_track">
+          <option value="علمي-أحياء">علمي-أحياء</option>
+          <option value="علمي-هندسية">علمي-هندسية</option>
+          <option value="علمي-حاسوب">علمي-حاسوب</option>
+          <option value="ادبي">ادبي</option>
+          <option value="ادبي-فنون">ادبي-فنون</option>
+          <option value="ادبي-دراسات اسلامية">ادبي-دراسات اسلامية</option>
+          <option value="ادبي-ادب انجليزي">ادبي-ادب انجليزي</option>
+        </select>
+      </div>
+    </div>
+    <div class="fgr">
+      <div class="fg"><label>رقم الهاتف</label><input type="text" id="stu_phone"></div>
+      <div class="fg"><label>البريد الإلكتروني</label><input type="email" id="stu_email"></div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-gh" onclick="closeMo('editStuModal')">إلغاء</button>
+      <button class="btn btn-p" onclick="saveStu()">💾 حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- إضافة/تعديل جامعة -->
+<div class="mo" id="uniModal">
+  <div class="modal">
+    <div class="mt" id="uniModalTitle">إضافة جامعة</div>
+    <div class="ms" id="uniModalSub">أدخل بيانات الجامعة</div>
+    <div class="fg"><label>اسم الجامعة *</label><input type="text" id="uni_name" placeholder="اسم الجامعة الكامل"></div>
+    <div class="fg"><label>نوع الجامعة</label>
+      <select id="uni_type">
+        <option value="حكومية">حكومية</option>
+        <option value="أهلية">أهلية / خاصة</option>
+      </select>
+    </div>
+    <div class="fg"><label>المنطقة / الولاية</label><input type="text" id="uni_region" placeholder="مثال: الخرطوم"></div>
+    <div class="mf">
+      <button class="btn btn-gh" onclick="closeMo('uniModal')">إلغاء</button>
+      <button class="btn btn-g" onclick="saveUni()">💾 حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- إضافة/تعديل تخصص -->
+<div class="mo" id="progModal">
+  <div class="modal">
+    <div class="mt" id="progModalTitle">إضافة تخصص</div>
+    <div class="ms" id="progModalSub"></div>
+    <div class="fg"><label>اسم التخصص *</label><input type="text" id="prog_name" placeholder="اسم التخصص/الكلية"></div>
+    <div class="fg"><label>الجامعة *</label>
+      <select id="prog_uni">
+        <option value="">-- اختر الجامعة --</option>
+        {% for uni in universities %}<option value="{{ uni.id }}">{{ uni.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="mf">
+      <button class="btn btn-gh" onclick="closeMo('progModal')">إلغاء</button>
+      <button class="btn btn-g" onclick="saveProg()">💾 حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- choice card style -->
+<style>
+.cc{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:7px;border:2px solid var(--border);margin-bottom:7px;cursor:pointer;transition:all .2s}
+.cc:hover{border-color:var(--accent);background:#f5f3ff}
+.cc.sel{border-color:var(--green);background:#f0fdf4}
+.cr{width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.74rem;font-weight:700;flex-shrink:0}
+.ci{flex:1}.cp{font-weight:600;font-size:.85rem}.cu{font-size:.74rem;color:var(--muted)}
+.ck{color:var(--green);font-size:1.1rem;opacity:0}
+.cc.sel .ck{opacity:1}
+</style>
+
 <div id="toast"></div>
 
-<!-- ══════════ JAVASCRIPT ══════════ -->
 <script>
+// ── Data từ Django ──
 var STATUS_DATA = {{ status_chart|safe }};
-var TRACK_LABELS = [];
-var TRACK_DATA = [];
-{% for t in track_distribution %}
-TRACK_LABELS.push("{{ t.field_of_study|escapejs }}");
-TRACK_DATA.push({{ t.count }});
-{% endfor %}
+var TRACK_LABELS = [], TRACK_DATA = [];
+{% for t in track_distribution %}TRACK_LABELS.push("{{ t.field_of_study|escapejs }}"); TRACK_DATA.push({{ t.count }});{% endfor %}
 
-// ── رسوم بيانية ──
+// ── Charts ──
 document.addEventListener('DOMContentLoaded', function() {
   new Chart(document.getElementById('statusChart'), {
     type: 'doughnut',
-    data: {
-      labels: Object.keys(STATUS_DATA),
-      datasets: [{ data: Object.values(STATUS_DATA), backgroundColor: ['#fbbf24','#34d399','#f87171'], borderWidth: 0 }]
-    },
+    data: { labels: Object.keys(STATUS_DATA), datasets: [{ data: Object.values(STATUS_DATA), backgroundColor: ['#fbbf24','#34d399','#f87171'], borderWidth: 0 }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', rtl: true } } }
   });
   new Chart(document.getElementById('trackChart'), {
     type: 'bar',
-    data: {
-      labels: TRACK_LABELS,
-      datasets: [{ label: 'عدد الطلاب', data: TRACK_DATA, backgroundColor: '#6366f1', borderRadius: 6 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-    }
+    data: { labels: TRACK_LABELS, datasets: [{ data: TRACK_DATA, backgroundColor: '#6366f1', borderRadius: 5 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
   });
+  loadStudents();
+  loadUniversities();
 });
 
-// ── التبويبات ──
-var tabTitles = {
-  overview: 'لوحة الإحصاءات', applications: 'طلبات التقديم',
-  students: 'الطلاب', universities: 'الجامعات والتخصصات', distribution: 'نظام التوزيع'
-};
-function switchTab(name, btn) {
-  document.querySelectorAll('.tab-content').forEach(function(t){ t.classList.remove('active'); });
-  document.querySelectorAll('.nav-item').forEach(function(b){ b.classList.remove('active'); });
+// ── Tabs ──
+var tabTitles = { overview:'لوحة الإحصاءات', applications:'طلبات التقديم', students:'الطلاب', acceptance:'قرارات القبول', universities:'الجامعات والتخصصات', reports:'التقارير والتصدير', distribution:'نظام التوزيع' };
+function go(name, btn) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.ni').forEach(function(b){ b.classList.remove('active'); });
   document.getElementById('tab-' + name).classList.add('active');
   if (btn) btn.classList.add('active');
   document.getElementById('pageTitle').textContent = tabTitles[name] || name;
 }
 
-// ── فلاتر ──
-function filterTable() {
-  var q  = document.getElementById('searchInput').value.trim().toLowerCase();
-  var st = document.getElementById('statusFilter').value;
-  var tr = document.getElementById('trackFilter').value;
+// ── Filters ──
+function filterApps() {
+  var q  = document.getElementById('appSearch').value.trim().toLowerCase();
+  var st = document.getElementById('appStatus').value;
+  var tr = document.getElementById('appTrack').value;
   document.querySelectorAll('#appTable tbody tr').forEach(function(row) {
-    var ok = (!q  || (row.dataset.name + row.dataset.seat + row.dataset.form).toLowerCase().includes(q))
+    var ok = (!q  || (row.dataset.name+row.dataset.seat+row.dataset.form).toLowerCase().includes(q))
           && (!st || row.dataset.status === st)
           && (!tr || row.dataset.track  === tr);
     row.style.display = ok ? '' : 'none';
   });
 }
-function filterStudents() {
-  var q = document.getElementById('studentSearch').value.trim().toLowerCase();
-  document.querySelectorAll('#studentsTable tbody tr').forEach(function(row) {
-    row.style.display = (!q || (row.dataset.name + row.dataset.seat + row.dataset.form).toLowerCase().includes(q)) ? '' : 'none';
+
+// ── Modals ──
+function openMo(id) { document.getElementById(id).classList.add('open'); }
+function closeMo(id) { document.getElementById(id).classList.remove('open'); }
+window.addEventListener('click', function(e) { if (e.target.classList.contains('mo')) e.target.classList.remove('open'); });
+
+// ══════════════════════════════════════
+//  ACCEPT MODAL
+// ══════════════════════════════════════
+var _accAppId = null, _accProgId = null, _accRow = null;
+function openAcceptModal(btn) {
+  var row = btn.closest('tr');
+  _accAppId = row.dataset.appid; _accRow = row; _accProgId = null;
+  document.getElementById('acceptModalSub').textContent = row.dataset.name + ' — ' + row.dataset.pct + '%';
+  var list = document.getElementById('acceptChoices');
+  list.innerHTML = '<p style="text-align:center;color:var(--muted)">جارٍ التحميل...</p>';
+  document.getElementById('confirmAcceptBtn').disabled = true;
+  openMo('acceptModal');
+  fetch('/api/student-programs/?application_id=' + _accAppId)
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      if (!d.success || !d.programs.length) { list.innerHTML = '<p style="text-align:center;color:var(--muted)">لا توجد رغبات مطابقة</p>'; return; }
+      var html = '';
+      d.programs.forEach(function(p) {
+        html += '<div class="cc" data-pid="'+p.id+'" data-pn="'+p.name+'" data-un="'+p.university+'" onclick="selChoice(this)">'
+          + '<div class="cr">'+p.priority+'</div>'
+          + '<div class="ci"><div class="cp">'+p.name+'</div><div class="cu">'+p.university+'</div></div>'
+          + '<div class="ck">✓</div></div>';
+      });
+      list.innerHTML = html;
+    }).catch(function(){ list.innerHTML = '<p style="color:var(--red);text-align:center">خطأ في الاتصال</p>'; });
+}
+function selChoice(card) {
+  document.querySelectorAll('#acceptChoices .cc').forEach(function(c){ c.classList.remove('sel'); });
+  card.classList.add('sel');
+  _accProgId = card.dataset.pid;
+  document.getElementById('confirmAcceptBtn').disabled = false;
+}
+function confirmAccept() {
+  if (!_accAppId || !_accProgId) return;
+  var btn = document.getElementById('confirmAcceptBtn');
+  btn.disabled = true; btn.textContent = '⏳...';
+  postJ('/api/set-acceptance/', { application_id: parseInt(_accAppId), program_id: parseInt(_accProgId) })
+    .then(function(res) {
+      btn.disabled = false; btn.textContent = '✅ تأكيد القبول';
+      if (res.success) {
+        toast(res.message || 'تم القبول', 's'); closeMo('acceptModal');
+        if (_accRow) {
+          _accRow.dataset.status = 'تم القبول';
+          _accRow.querySelector('.status-cell').innerHTML = '<span class="badge ba">تم القبول</span>';
+          _accRow.querySelector('.prog-cell').innerHTML = '<strong>'+res.program_name+'</strong><br><span style="color:var(--muted)">'+res.university_name+'</span>';
+        }
+        refreshStats();
+      } else toast(res.error || 'خطأ', 'e');
+    });
+}
+
+// ══════════════════════════════════════
+//  STATUS MODAL
+// ══════════════════════════════════════
+var _stAppId = null, _stRow = null;
+function openStatusModal(btn) {
+  var row = btn.closest('tr');
+  _stAppId = row.dataset.appid; _stRow = row;
+  document.getElementById('statusModalSub').textContent = 'الطالب: ' + row.dataset.name;
+  document.getElementById('newStatus').value = row.dataset.status;
+  openMo('statusModal');
+}
+function confirmStatus() {
+  if (!_stAppId) return;
+  var ns = document.getElementById('newStatus').value;
+  postJ('/admin-update-status/', { application_id: parseInt(_stAppId), status: ns })
+    .then(function(res) {
+      if (res.success) {
+        toast(res.message || 'تم التحديث', 's'); closeMo('statusModal');
+        if (_stRow) {
+          _stRow.dataset.status = ns;
+          var bc = ns==='تم القبول' ? 'ba' : (ns==='مرفوض' ? 'br' : 'bp');
+          _stRow.querySelector('.status-cell').innerHTML = '<span class="badge '+bc+'">'+ns+'</span>';
+        }
+        refreshStats();
+      } else toast(res.error || 'خطأ', 'e');
+    });
+}
+
+// ══════════════════════════════════════
+//  DELETE APP
+// ══════════════════════════════════════
+function deleteApp(btn) {
+  var row = btn.closest('tr');
+  if (!confirm('هل أنت متأكد من حذف طلب "'+row.dataset.name+'"؟')) return;
+  postJ('/admin-delete-application/', { application_id: parseInt(row.dataset.appid) })
+    .then(function(res) {
+      if (res.success) { toast(res.message, 's'); row.remove(); refreshStats(); }
+      else toast(res.error || 'خطأ', 'e');
+    });
+}
+
+// ══════════════════════════════════════
+//  STUDENTS CRUD
+// ══════════════════════════════════════
+var _stuPage = 1, _stuId = null, _stuMode = 'edit';
+
+function loadStudents() {
+  var q = (document.getElementById('stuSearch') || {}).value || '';
+  fetch('/api/list-students/?q=' + encodeURIComponent(q) + '&page=' + _stuPage + '&limit=30')
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      if (!d.success) return;
+      var tbody = document.getElementById('stuBody');
+      if (!d.students.length) { tbody.innerHTML = '<tr><td colspan="9"><div class="empty">👤 لا يوجد طلاب</div></td></tr>'; buildPag('stuPag', 0, 1); return; }
+      var html = '';
+      d.students.forEach(function(s) {
+        var bc = s.status==='تم القبول' ? 'ba' : (s.status==='مرفوض' ? 'br' : 'bp');
+        html += '<tr>'
+          + '<td><code style="font-size:.76rem">'+s.form_number+'</code></td>'
+          + '<td><strong>'+s.name+'</strong></td>'
+          + '<td>'+s.seat_number+'</td>'
+          + '<td><strong>'+s.percentage+'%</strong></td>'
+          + '<td style="font-size:.75rem">'+s.field_of_study+'</td>'
+          + '<td style="font-size:.75rem">'+(s.phone_number||'—')+'</td>'
+          + '<td style="font-size:.75rem">'+(s.email_address||'—')+'</td>'
+          + '<td><span class="badge '+bc+'">'+(s.status||'—')+'</span></td>'
+          + '<td><div style="display:flex;gap:4px">'
+          + '<button class="btn btn-gh btn-sm" onclick="openEditStu('+JSON.stringify(s)+')">✏️ تعديل</button>'
+          + '</div></td></tr>';
+      });
+      tbody.innerHTML = html;
+      buildPag('stuPag', d.pages, _stuPage, function(p){ _stuPage = p; loadStudents(); });
+    });
+}
+
+function openAddStudentModal() {
+  _stuMode = 'add'; _stuId = null;
+  document.getElementById('editStuTitle').textContent = '➕ إضافة طالب جديد';
+  document.getElementById('editStuSub').textContent = 'أدخل بيانات الطالب الجديد';
+  ['stu_name','stu_seat','stu_pct','stu_phone','stu_email'].forEach(function(id){ document.getElementById(id).value = ''; });
+  document.getElementById('stu_track').value = 'علمي-أحياء';
+  openMo('editStuModal');
+}
+
+function openEditStu(s) {
+  _stuMode = 'edit'; _stuId = s.id;
+  document.getElementById('editStuTitle').textContent = '✏️ تعديل بيانات الطالب';
+  document.getElementById('editStuSub').textContent = s.name + ' | ' + s.form_number;
+  document.getElementById('stu_name').value  = s.name;
+  document.getElementById('stu_seat').value  = s.seat_number;
+  document.getElementById('stu_pct').value   = s.percentage;
+  document.getElementById('stu_phone').value = s.phone_number || '';
+  document.getElementById('stu_email').value = s.email_address || '';
+  document.getElementById('stu_track').value = s.field_of_study;
+  openMo('editStuModal');
+}
+
+function saveStu() {
+  var body = {
+    name:          document.getElementById('stu_name').value.trim(),
+    seat_number:   document.getElementById('stu_seat').value.trim(),
+    percentage:    document.getElementById('stu_pct').value,
+    field_of_study:document.getElementById('stu_track').value,
+    phone_number:  document.getElementById('stu_phone').value.trim(),
+    email_address: document.getElementById('stu_email').value.trim(),
+  };
+  var url, msg;
+  if (_stuMode === 'add') {
+    // للإضافة نستخدم نفس admission لكن نمرر JSON
+    url = '/api/edit-student/';
+    body.action = 'add';
+    msg = 'تمت إضافة الطالب';
+  } else {
+    url = '/api/edit-student/';
+    body.student_id = _stuId;
+    msg = 'تم تحديث بيانات الطالب';
+  }
+  postJ(url, body).then(function(res) {
+    if (res.success) { toast(res.message || msg, 's'); closeMo('editStuModal'); loadStudents(); }
+    else toast((res.errors || [res.error]).join(' | '), 'e');
   });
 }
 
-// ── مودالات ──
-function openModal(id)  { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-window.addEventListener('click', function(e) {
-  if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('open');
-});
+// ══════════════════════════════════════
+//  UNIVERSITIES CRUD
+// ══════════════════════════════════════
+var _uniMode = 'add', _uniId = null, _progMode = 'add', _progId = null;
 
-// ══════════════════════════════════════════
-//  قبول يدوي - Modal
-// ══════════════════════════════════════════
-var _acceptAppId    = null;
-var _acceptProgId   = null;
-var _acceptRow      = null;
-
-function openAcceptModal(btn) {
-  var row = btn.closest('tr');
-  _acceptAppId  = row.dataset.appid;
-  _acceptRow    = row;
-  _acceptProgId = null;
-
-  var name = row.dataset.name;
-  var pct  = row.dataset.pct;
-  document.getElementById('acceptModalSub').textContent = name + ' — النسبة: ' + pct + '%';
-
-  var list = document.getElementById('acceptChoicesList');
-  list.innerHTML = '<p style="text-align:center;color:var(--muted);padding:20px 0">جارٍ تحميل الرغبات...</p>';
-  document.getElementById('confirmAcceptBtn').disabled = true;
-
-  openModal('acceptModal');
-
-  fetch('/api/student-programs/?application_id=' + _acceptAppId)
+function loadUniversities() {
+  fetch('/api/list-universities/')
     .then(function(r){ return r.json(); })
-    .then(function(data) {
-      if (!data.success || data.programs.length === 0) {
-        list.innerHTML = '<p style="text-align:center;color:var(--muted);padding:20px 0">⚠️ لا توجد رغبات مطابقة لهذا الطالب في قاعدة البيانات.</p>';
-        return;
-      }
-      var html = '';
-      data.programs.forEach(function(p) {
-        html += '<div class="choice-card" data-progid="' + p.id + '" data-progname="' + p.name + '" data-uniname="' + p.university + '" onclick="selectChoice(this)">'
-          + '<div class="choice-rank">' + p.priority + '</div>'
-          + '<div class="choice-info">'
-          + '<div class="choice-prog">' + p.name + '</div>'
-          + '<div class="choice-uni">' + p.university + '</div>'
-          + '</div>'
-          + '<div class="choice-check">✓</div>'
+    .then(function(d) {
+      if (!d.success) return;
+      var container = document.getElementById('uniList');
+      if (!d.universities.length) { container.innerHTML = '<div class="empty">🏛️ لا توجد جامعات</div>'; return; }
+      var html = '<div style="overflow-x:auto"><table><thead><tr><th>#</th><th>الجامعة</th><th>النوع</th><th>التخصصات</th><th>المقبولون</th><th>إجراءات</th></tr></thead><tbody>';
+      d.universities.forEach(function(u, i) {
+        var tc = u.university_type === 'حكومية' ? 'bg' : 'bpr';
+        html += '<tr><td>'+(i+1)+'</td>'
+          + '<td><strong>'+u.name+'</strong></td>'
+          + '<td><span class="badge '+tc+'">'+u.university_type+'</span></td>'
+          + '<td>'
+          + '<button class="btn btn-gh btn-sm" onclick="toggleProgs(\'up'+u.id+'\')">'+u.programs_count+' تخصص 🔽</button>'
+          + '</td>'
+          + '<td><span style="font-size:.8rem;color:var(--muted)">'+(u.programs.reduce(function(s,p){return s+p.accepted_count;},0))+' مقبول</span></td>'
+          + '<td><div style="display:flex;gap:4px">'
+          + '<button class="btn btn-gh btn-sm" onclick=\'openUniModal("edit",'+JSON.stringify(u)+')\'>✏️</button>'
+          + '<button class="btn btn-g btn-sm" onclick=\'openProgModal("add",'+u.id+')\'>+ تخصص</button>'
+          + '<button class="btn btn-d btn-sm" onclick="delUni('+u.id+',\''+u.name+'\')">🗑️</button>'
+          + '</div></td></tr>';
+        // programs sub-table
+        html += '<tr id="up'+u.id+'" style="display:none"><td colspan="6" style="padding:0 0 0 30px;background:#f8fafc"><table style="width:96%"><thead><tr><th>التخصص</th><th>مقبولون</th><th>إجراءات</th></tr></thead><tbody>';
+        u.programs.forEach(function(p) {
+          html += '<tr><td>'+p.name+'</td><td>'+p.accepted_count+'</td>'
+            + '<td><div style="display:flex;gap:4px">'
+            + '<button class="btn btn-gh btn-sm" onclick=\'openProgModal("edit",'+u.id+','+JSON.stringify(p)+')\'>✏️</button>'
+            + '<button class="btn btn-d btn-sm" onclick="delProg('+p.id+',\''+p.name+'\')">🗑️</button>'
+            + '</div></td></tr>';
+        });
+        html += '</tbody></table></td></tr>';
+      });
+      html += '</tbody></table></div>';
+      container.innerHTML = html;
+    });
+}
+
+function toggleProgs(id) {
+  var row = document.getElementById(id);
+  if (row) row.style.display = row.style.display === 'none' ? '' : 'none';
+}
+
+function openUniModal(mode, data) {
+  _uniMode = mode; _uniId = data ? data.id : null;
+  document.getElementById('uniModalTitle').textContent = mode==='add' ? '➕ إضافة جامعة' : '✏️ تعديل جامعة';
+  document.getElementById('uniModalSub').textContent   = mode==='edit' ? (data.name) : 'أدخل بيانات الجامعة';
+  document.getElementById('uni_name').value   = data && data.name             ? data.name : '';
+  document.getElementById('uni_type').value   = data && data.university_type  ? data.university_type : 'حكومية';
+  document.getElementById('uni_region').value = data && data.region           ? data.region : '';
+  openMo('uniModal');
+}
+function saveUni() {
+  var body = { action: _uniMode, name: document.getElementById('uni_name').value.trim(), university_type: document.getElementById('uni_type').value };
+  if (_uniMode === 'edit') body.university_id = _uniId;
+  postJ('/api/edit-university/', body).then(function(res) {
+    if (res.success) { toast(res.message, 's'); closeMo('uniModal'); loadUniversities(); }
+    else toast(res.error || 'خطأ', 'e');
+  });
+}
+function delUni(id, name) {
+  if (!confirm('حذف جامعة "'+name+'"؟ سيتم حذف جميع تخصصاتها.')) return;
+  postJ('/api/edit-university/', { action:'delete', university_id: id }).then(function(res) {
+    if (res.success) { toast(res.message, 's'); loadUniversities(); }
+    else toast(res.error || 'خطأ', 'e');
+  });
+}
+
+function openProgModal(mode, uniId, prog) {
+  _progMode = mode; _progId = prog ? prog.id : null;
+  document.getElementById('progModalTitle').textContent = mode==='add' ? '➕ إضافة تخصص' : '✏️ تعديل تخصص';
+  document.getElementById('progModalSub').textContent   = '';
+  document.getElementById('prog_name').value = prog ? prog.name : '';
+  document.getElementById('prog_uni').value  = uniId;
+  openMo('progModal');
+}
+function saveProg() {
+  var body = { action: _progMode, name: document.getElementById('prog_name').value.trim(), university_id: parseInt(document.getElementById('prog_uni').value) };
+  if (_progMode === 'edit') body.program_id = _progId;
+  postJ('/api/edit-program/', body).then(function(res) {
+    if (res.success) { toast(res.message, 's'); closeMo('progModal'); loadUniversities(); }
+    else toast(res.error || 'خطأ', 'e');
+  });
+}
+function delProg(id, name) {
+  if (!confirm('حذف تخصص "'+name+'"؟')) return;
+  postJ('/api/edit-program/', { action:'delete', program_id: id }).then(function(res) {
+    if (res.success) { toast(res.message, 's'); loadUniversities(); }
+    else toast(res.error || 'خطأ', 'e');
+  });
+}
+
+// ══════════════════════════════════════
+//  REPORTS
+// ══════════════════════════════════════
+function loadReport(type) {
+  var area = document.getElementById('reportArea');
+  area.innerHTML = '<div class="card"><p style="text-align:center;color:var(--muted);padding:20px">جارٍ تحميل التقرير...</p></div>';
+  fetch('/api/report-data/?type=' + type)
+    .then(function(r){ return r.json(); })
+    .then(function(res) {
+      if (!res.success) { area.innerHTML = '<div class="card"><p style="color:var(--red)">خطأ: '+res.error+'</p></div>'; return; }
+      var d = res.data;
+      var html = '<div class="card"><div class="ch"><div class="ct">';
+
+      if (type === 'summary') {
+        html += '📊 التقرير الشامل</div><div style="display:flex;gap:8px">'
+          + '<button class="btn btn-o btn-sm" onclick="exportReport(\'summary\',\'csv\')">⬇️ CSV</button>'
+          + '<button class="btn btn-p btn-sm" onclick="exportReport(\'summary\',\'pdf\')">📄 PDF</button>'
+          + '</div></div>';
+        html += '<div class="sg" style="grid-template-columns:repeat(4,1fr)">'
+          + mksc('إجمالي الطلبات', d.total_applications)
+          + mksc('المقبولون', d.accepted)
+          + mksc('إجمالي الجامعات', d.total_universities)
+          + mksc('إجمالي التخصصات', d.total_programs)
           + '</div>';
-      });
-      list.innerHTML = html;
-    })
-    .catch(function() {
-      list.innerHTML = '<p style="color:var(--red);text-align:center;padding:20px 0">خطأ في الاتصال بالخادم</p>';
-    });
-}
+        html += '<div class="sg" style="grid-template-columns:repeat(3,1fr)">'
+          + mksc('متوسط النسبة', d.avg_percentage + '%')
+          + mksc('الانحراف المعياري', d.std_percentage + '%')
+          + mksc('نسبة القبول', (d.total_applications ? Math.round(d.accepted/d.total_applications*100) : 0) + '%')
+          + '</div>';
 
-function selectChoice(card) {
-  // إلغاء تحديد السابق
-  document.querySelectorAll('#acceptChoicesList .choice-card').forEach(function(c){ c.classList.remove('selected'); });
-  card.classList.add('selected');
-  _acceptProgId = card.dataset.progid;
-  document.getElementById('confirmAcceptBtn').disabled = false;
-}
-
-function confirmManualAccept() {
-  if (!_acceptAppId || !_acceptProgId) return;
-
-  var btn = document.getElementById('confirmAcceptBtn');
-  btn.disabled = true;
-  btn.innerHTML = '⏳ جارٍ الحفظ...';
-
-  postJSON('/api/set-acceptance/', { application_id: parseInt(_acceptAppId), program_id: parseInt(_acceptProgId) })
-    .then(function(res) {
-      btn.innerHTML = '✅ تأكيد القبول';
-      btn.disabled = false;
-      if (res.success) {
-        showToast('تم قبول الطالب في ' + res.program_name + ' ✅', 'success');
-        closeModal('acceptModal');
-        // ── تحديث الصف في الجدول مباشرة بدون reload ──
-        if (_acceptRow) {
-          _acceptRow.dataset.status = 'تم القبول';
-          _acceptRow.querySelector('.status-cell').innerHTML = '<span class="badge b-a">تم القبول</span>';
-          _acceptRow.querySelector('.prog-cell').innerHTML = '<strong>' + res.program_name + '</strong><br><span style="color:var(--muted)">' + res.university_name + '</span>';
-        }
-        refreshStats();
-      } else {
-        showToast(res.error || 'حدث خطأ', 'error');
-      }
-    });
-}
-
-// ── تغيير الحالة ──
-var _statusAppId = null;
-var _statusRow   = null;
-function openStatusModal(btn) {
-  var row = btn.closest('tr');
-  _statusAppId = row.dataset.appid;
-  _statusRow   = row;
-  document.getElementById('statusModalSub').textContent = 'الطالب: ' + row.dataset.name;
-  document.getElementById('newStatus').value = row.dataset.status;
-  openModal('statusModal');
-}
-function confirmStatus() {
-  if (!_statusAppId) return;
-  var newSt = document.getElementById('newStatus').value;
-  postJSON('/admin-update-status/', { application_id: parseInt(_statusAppId), status: newSt })
-    .then(function(res) {
-      if (res.success) {
-        showToast(res.message, 'success');
-        closeModal('statusModal');
-        // تحديث الصف مباشرة
-        if (_statusRow) {
-          _statusRow.dataset.status = newSt;
-          var badgeClass = newSt === 'تم القبول' ? 'b-a' : (newSt === 'مرفوض' ? 'b-r' : 'b-p');
-          _statusRow.querySelector('.status-cell').innerHTML = '<span class="badge ' + badgeClass + '">' + newSt + '</span>';
-        }
-        refreshStats();
-      } else {
-        showToast(res.error || 'حدث خطأ', 'error');
-      }
-    });
-}
-
-// ── حذف ──
-function deleteApp(btn) {
-  var row  = btn.closest('tr');
-  var name = row.dataset.name;
-  if (!confirm('هل أنت متأكد من حذف طلب "' + name + '"؟\nهذا الإجراء لا يمكن التراجع عنه.')) return;
-  postJSON('/admin-delete-application/', { application_id: parseInt(row.dataset.appid) })
-    .then(function(res) {
-      if (res.success) { showToast(res.message, 'success'); row.remove(); refreshStats(); }
-      else showToast(res.error || 'حدث خطأ', 'error');
-    });
-}
-
-// ══════════════════════════════════════════
-//  التوزيع التلقائي — يحدّث الجدول مباشرة
-// ══════════════════════════════════════════
-function executeDistribution() {
-  if (!confirm('هل تريد تنفيذ التوزيع التلقائي؟\nسيتم قبول الطلاب المؤهلين وتحديث الجدول فوراً.')) return;
-
-  var btn = document.getElementById('distBtn');
-  btn.disabled = true;
-  btn.innerHTML = ' جارٍ التوزيع...';
-
-  var div = document.getElementById('distResult');
-  div.innerHTML = '<p style="color:var(--muted)">جارٍ تنفيذ التوزيع، قد يستغرق بعض الوقت...</p>';
-
-  postJSON('/api/execute-allocation/', {})
-    .then(function(res) {
-      btn.disabled = false;
-      btn.innerHTML = ' تنفيذ التوزيع التلقائي';
-
-      if (!res.success) {
-        div.innerHTML = '<div style="background:#fee2e2;border-radius:8px;padding:16px;color:#991b1b">❌ ' + (res.error || 'خطأ') + '</div>';
-        return;
-      }
-
-      var stats = res.stats || {};
-      var details = stats.details || [];
-
-      // ── تحديث صفوف الجدول مباشرة ──
-      var updated = 0;
-      details.forEach(function(d) {
-        if (!d.accepted) return;
-        // ابحث عن الصف بالاسم
-        var rows = document.querySelectorAll('#appTable tbody tr');
-        rows.forEach(function(row) {
-          if (row.dataset.name === d.student) {
-            row.dataset.status = 'تم القبول';
-            row.querySelector('.status-cell').innerHTML = '<span class="badge b-a">تم القبول</span>';
-            row.querySelector('.prog-cell').innerHTML = '<strong>' + d.program + '</strong><br><span style="color:var(--muted)">' + d.university + '</span>';
-            updated++;
-          }
+      } else if (type === 'tracks') {
+        html += '📚 توزيع المسارات</div><div style="display:flex;gap:8px">'
+          + '<button class="btn btn-o btn-sm" onclick="exportReport(\'tracks\',\'csv\')">⬇️ CSV</button>'
+          + '</div></div>';
+        html += '<table><thead><tr><th>المسار</th><th>إجمالي</th><th>مقبول</th><th>مرفوض</th><th>قيد المراجعة</th><th>نسبة القبول</th></tr></thead><tbody>';
+        (d.tracks || []).forEach(function(t) {
+          html += '<tr><td><strong>'+t.name+'</strong></td><td>'+t.total+'</td><td style="color:var(--green)">'+t.accepted+'</td><td style="color:var(--red)">'+t.rejected+'</td><td style="color:var(--yellow)">'+t.pending+'</td><td><strong>'+t.acceptance_rate+'%</strong></td></tr>';
         });
-      });
+        html += '</tbody></table>';
 
-      // ── عرض ملخص النتائج ──
-      var acceptedCount = stats.accepted || 0;
-      var skippedCount  = stats.skipped  || 0;
-      var totalCount    = stats.total    || 0;
-
-      var html = '<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:20px;margin-bottom:16px">'
-        + '<h4 style="color:#065f46;margin-bottom:12px">✅ اكتمل التوزيع التلقائي</h4>'
-        + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">'
-        + '<div style="text-align:center;background:#fff;border-radius:8px;padding:12px"><div style="font-size:1.8rem;font-weight:800;color:#16a34a">' + acceptedCount + '</div><div style="font-size:.75rem;color:var(--muted)">مقبول</div></div>'
-        + '<div style="text-align:center;background:#fff;border-radius:8px;padding:12px"><div style="font-size:1.8rem;font-weight:800;color:#ca8a04">' + skippedCount + '</div><div style="font-size:.75rem;color:var(--muted)">لم يُقبل</div></div>'
-        + '<div style="text-align:center;background:#fff;border-radius:8px;padding:12px"><div style="font-size:1.8rem;font-weight:800;color:#1a3a6b">' + totalCount + '</div><div style="font-size:.75rem;color:var(--muted)">إجمالي</div></div>'
-        + '</div>';
-
-      // جدول التفاصيل
-      if (details.length > 0) {
-        html += '<div style="max-height:280px;overflow-y:auto">'
-          + '<table class="dist-table"><thead><tr><th>الطالب</th><th>النسبة</th><th>البرنامج</th><th>الجامعة</th><th>الرغبة</th></tr></thead><tbody>';
-        details.forEach(function(d) {
-          if (d.accepted) {
-            html += '<tr class="accepted"><td><strong>' + d.student + '</strong></td><td>' + d.percentage + '%</td><td>' + d.program + '</td><td>' + d.university + '</td><td>#' + d.priority_used + '</td></tr>';
-          } else {
-            html += '<tr class="skipped"><td>' + d.student + '</td><td>' + d.percentage + '%</td><td colspan="3" style="color:var(--muted)">لم يُقبل — لا توجد رغبة مناسبة</td></tr>';
-          }
+      } else if (type === 'universities') {
+        html += '🏛️ إحصاءات الجامعات</div><div style="display:flex;gap:8px">'
+          + '<button class="btn btn-o btn-sm" onclick="exportReport(\'universities\',\'csv\')">⬇️ CSV</button>'
+          + '</div></div>';
+        html += '<table><thead><tr><th>#</th><th>الجامعة</th><th>النوع</th><th>عدد التخصصات</th><th>عدد الرغبات</th><th>المقبولون</th></tr></thead><tbody>';
+        (d.universities || []).forEach(function(u, i) {
+          var tc = u.type==='حكومية' ? 'bg' : 'bpr';
+          html += '<tr><td>'+(i+1)+'</td><td><strong>'+u.name+'</strong></td><td><span class="badge '+tc+'">'+u.type+'</span></td><td>'+u.programs_count+'</td><td>'+u.choices+'</td><td style="color:var(--green)"><strong>'+u.accepted+'</strong></td></tr>';
         });
-        html += '</tbody></table></div>';
+        html += '</tbody></table>';
+
+      } else if (type === 'accepted') {
+        html += '✅ قائمة المقبولين ('+d.total+')</div><div style="display:flex;gap:8px">'
+          + '<button class="btn btn-o btn-sm" onclick="exportReport(\'accepted\',\'csv\')">⬇️ CSV</button>'
+          + '<button class="btn btn-p btn-sm" onclick="exportReport(\'accepted\',\'pdf\')">📄 PDF</button>'
+          + '</div></div>';
+        html += '<table><thead><tr><th>الاسم</th><th>رقم الجلوس</th><th>النسبة</th><th>المسار</th><th>التخصص المقبول</th><th>الجامعة</th><th>التاريخ</th></tr></thead><tbody>';
+        (d.accepted || []).forEach(function(r) {
+          html += '<tr><td><strong>'+r.name+'</strong></td><td>'+r.seat+'</td><td>'+r.percentage+'%</td><td>'+r.track+'</td><td>'+r.program+'</td><td>'+r.university+'</td><td>'+r.date+'</td></tr>';
+        });
+        html += '</tbody></table>';
+
+      } else if (type === 'score_dist') {
+        html += '📈 توزيع النسب</div><div style="display:flex;gap:8px">'
+          + '<button class="btn btn-o btn-sm" onclick="exportReport(\'score_dist\',\'csv\')">⬇️ CSV</button>'
+          + '</div></div>';
+        html += '<table><thead><tr><th>النطاق</th><th>عدد الطلاب</th><th>النسبة من الإجمالي</th></tr></thead><tbody>';
+        var total = (d.ranges||[]).reduce(function(s,r){return s+r.count;},0);
+        (d.ranges||[]).forEach(function(r) {
+          var pct = total ? Math.round(r.count/total*100) : 0;
+          html += '<tr><td><strong>'+r.range+'%</strong></td><td>'+r.count+'</td>'
+            + '<td><div style="display:flex;align-items:center;gap:8px"><div style="background:#e5e7eb;border-radius:4px;height:8px;flex:1"><div style="background:var(--accent);height:100%;border-radius:4px;width:'+pct+'%"></div></div><span>'+pct+'%</span></div></td></tr>';
+        });
+        html += '</tbody></table>';
       }
+
       html += '</div>';
-      div.innerHTML = html;
-
-      refreshStats();
-      showToast('تم قبول ' + acceptedCount + ' طالب بنجاح', 'success');
+      area.innerHTML = html;
     });
 }
+function mksc(label, val) {
+  return '<div class="sc"><div class="sl">'+label+'</div><div class="sv" style="font-size:1.4rem">'+val+'</div></div>';
+}
 
-function resetDistribution() {
-  if (!confirm('⚠️ هل تريد إعادة تعيين التوزيع؟\nسيتم إلغاء جميع قرارات القبول وإعادة الطلبات إلى قيد المراجعة.')) return;
-  postJSON('/api/reset-allocation/', {})
-    .then(function(res) {
-      if (res.success) {
-        document.getElementById('distResult').innerHTML = '<div style="background:#d1fae5;border-radius:8px;padding:16px;color:#065f46">✅ تم إعادة تعيين ' + res.reset_count + ' طلب</div>';
-        // إعادة تعيين الجدول
-        document.querySelectorAll('#appTable tbody tr').forEach(function(row) {
-          if (row.dataset.status === 'تم القبول') {
-            row.dataset.status = 'يتم المراجعة';
-            row.querySelector('.status-cell').innerHTML = '<span class="badge b-p">يتم المراجعة</span>';
-            row.querySelector('.prog-cell').innerHTML = '<span style="color:var(--muted)">—</span>';
-          }
-        });
-        refreshStats();
-        showToast('تم إعادة تعيين ' + res.reset_count + ' طلب', 'success');
-      } else {
-        document.getElementById('distResult').innerHTML = '<div style="background:#fee2e2;border-radius:8px;padding:16px;color:#991b1b">❌ ' + (res.error || 'خطأ') + '</div>';
+// ══════════════════════════════════════
+//  ACCEPTANCE TAB
+// ══════════════════════════════════════
+function searchAcceptance() {
+  var q = document.getElementById('acceptInput').value.trim();
+  if (!q) { toast('أدخل رقم البحث', 'e'); return; }
+  var div = document.getElementById('acceptResult');
+  div.innerHTML = '<p style="text-align:center;color:var(--muted)">جارٍ البحث...</p>';
+  var param = /^\d+$/.test(q) ? 'seat_number='+q : 'form_number='+q;
+  fetch('/api/search-student/?'+param).then(function(r){ return r.json(); }).then(function(d) {
+    if (!d.success) { div.innerHTML = '<p style="color:var(--red)">❌ '+d.error+'</p>'; return; }
+    var app = d.application;
+    var html = '<div style="background:#f8fafc;border-radius:8px;padding:16px;margin-bottom:14px">'
+      + '<h4 style="color:var(--navy);margin-bottom:8px">'+app.student_name+'</h4>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.83rem">'
+      + '<span>رقم الجلوس: <strong>'+app.seat_number+'</strong></span>'
+      + '<span>رقم الاستمارة: <strong>'+app.form_number+'</strong></span>'
+      + '<span>النسبة: <strong>'+app.percentage+'%</strong></span>'
+      + '<span>الحالة: <strong>'+app.status+'</strong></span></div></div>';
+    if (app.accepted_program) {
+      html += '<div style="background:#d1fae5;border-radius:7px;padding:10px 14px;font-size:.85rem;color:#065f46;margin-bottom:14px">✅ مقبول في: <strong>'+app.accepted_program.name+'</strong> — '+app.accepted_program.university+'</div>';
+    }
+    html += '<div class="fg"><label>اختر برنامج القبول:</label><select id="acceptSel"><option value="">جارٍ التحميل...</option></select></div>';
+    html += '<button class="btn btn-g" onclick="doAccept('+app.id+')">✅ تأكيد القبول</button>';
+    div.innerHTML = html;
+    fetch('/api/student-programs/?application_id='+app.id).then(function(r){ return r.json(); }).then(function(pd) {
+      var sel = document.getElementById('acceptSel');
+      if (pd.success && pd.programs.length) {
+        sel.innerHTML = '<option value="">-- اختر --</option>';
+        pd.programs.forEach(function(p){ sel.innerHTML += '<option value="'+p.id+'">'+p.priority+'. '+p.name+' — '+p.university+'</option>'; });
+      } else sel.innerHTML = '<option value="">لا توجد رغبات</option>';
+    });
+  });
+}
+function doAccept(appId) {
+  var pid = document.getElementById('acceptSel').value;
+  if (!pid) { toast('اختر برنامجاً', 'e'); return; }
+  postJ('/api/set-acceptance/', { application_id: appId, program_id: parseInt(pid) }).then(function(res) {
+    if (res.success) { toast(res.message, 's'); searchAcceptance(); refreshStats(); }
+    else toast(res.error || 'خطأ', 'e');
+  });
+}
+
+// ══════════════════════════════════════
+//  EXPORT
+// ══════════════════════════════════════
+function exportCSV(type) {
+  window.location.href = '/export-'+type+'-csv/';
+}
+function exportPDF(type) {
+  toast('PDF قيد التطوير — استخدم CSV', '');
+}
+function exportReport(type, format) {
+  if (format === 'csv') {
+    fetch('/api/report-data/?type='+type).then(function(r){ return r.json(); }).then(function(res) {
+      if (!res.success) { toast(res.error, 'e'); return; }
+      var d = res.data; var csv = '', rows = [];
+      if (type === 'accepted') {
+        csv = 'الاسم,رقم الجلوس,النسبة,المسار,التخصص,الجامعة,التاريخ\n';
+        (d.accepted||[]).forEach(function(r){ rows.push([r.name,r.seat,r.percentage,r.track,r.program,r.university,r.date]); });
+      } else if (type === 'tracks') {
+        csv = 'المسار,الإجمالي,مقبول,مرفوض,قيد المراجعة,نسبة القبول\n';
+        (d.tracks||[]).forEach(function(r){ rows.push([r.name,r.total,r.accepted,r.rejected,r.pending,r.acceptance_rate+'%']); });
+      } else if (type === 'universities') {
+        csv = 'الجامعة,النوع,التخصصات,الرغبات,المقبولون\n';
+        (d.universities||[]).forEach(function(r){ rows.push([r.name,r.type,r.programs_count,r.choices,r.accepted]); });
+      } else if (type === 'score_dist') {
+        csv = 'النطاق,عدد الطلاب\n';
+        (d.ranges||[]).forEach(function(r){ rows.push([r.range,r.count]); });
+      } else if (type === 'summary') {
+        rows = [
+          ['إجمالي الطلبات', d.total_applications],
+          ['المقبولون', d.accepted],
+          ['المرفوضون', d.rejected],
+          ['قيد المراجعة', d.pending],
+          ['متوسط النسبة', d.avg_percentage],
+          ['الانحراف المعياري', d.std_percentage],
+          ['عدد الجامعات', d.total_universities],
+          ['عدد التخصصات', d.total_programs],
+        ];
+        csv = 'البند,القيمة\n';
       }
+      rows.forEach(function(r){ csv += r.map(function(v){ return '"'+(v||'').toString().replace(/"/g,'""')+'"'; }).join(',') + '\n'; });
+      dlCSV(csv, 'report_'+type+'_'+new Date().toISOString().slice(0,10)+'.csv');
     });
+  } else {
+    toast('PDF قيد التطوير', '');
+  }
+}
+function dlCSV(content, filename) {
+  var bom = '\uFEFF';
+  var blob = new Blob([bom + content], { type: 'text/csv;charset=utf-8;' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+  toast('تم تصدير ' + filename, 's');
 }
 
-// ── تحديث الإحصاءات ──
+// ══════════════════════════════════════
+//  DISTRIBUTION
+// ══════════════════════════════════════
+function execDist() {
+  if (!confirm('تنفيذ التوزيع التلقائي؟')) return;
+  var btn = document.getElementById('distBtn');
+  btn.disabled = true; btn.textContent = '⏳ جارٍ التنفيذ...';
+  var div = document.getElementById('distResult');
+  div.innerHTML = '<p style="color:var(--muted)">جارٍ التنفيذ...</p>';
+  postJ('/api/execute-allocation/', {}).then(function(res) {
+    btn.disabled = false; btn.textContent = '▶️ تنفيذ التوزيع التلقائي';
+    if (!res.success) { div.innerHTML = '<div style="background:#fee2e2;border-radius:8px;padding:14px;color:#991b1b">❌ '+(res.error||'خطأ')+'</div>'; return; }
+    var s = res.stats || {};
+    var details = s.details || [];
+    var html = '<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:18px;margin-bottom:14px">'
+      + '<h4 style="color:#065f46;margin-bottom:12px">✅ اكتمل التوزيع</h4>'
+      + '<div class="sg" style="grid-template-columns:repeat(3,1fr);margin:0 0 14px">'
+      + '<div class="sc g" style="padding:12px"><div class="sl">مقبول</div><div class="sv">'+(s.accepted||0)+'</div></div>'
+      + '<div class="sc y" style="padding:12px"><div class="sl">لم يُقبل</div><div class="sv">'+(s.skipped||0)+'</div></div>'
+      + '<div class="sc" style="padding:12px"><div class="sl">إجمالي</div><div class="sv">'+(s.total||0)+'</div></div>'
+      + '</div>';
+    if (details.length) {
+      html += '<div style="max-height:260px;overflow-y:auto"><table><thead><tr><th>الطالب</th><th>النسبة</th><th>البرنامج</th><th>الجامعة</th><th>الرغبة</th></tr></thead><tbody>';
+      details.forEach(function(d) {
+        if (d.accepted) {
+          html += '<tr style="background:#f0fdf4"><td><strong>'+d.student+'</strong></td><td>'+d.percentage+'%</td><td>'+d.program+'</td><td>'+d.university+'</td><td>#'+d.priority_used+'</td></tr>';
+          // update table row
+          var rows = document.querySelectorAll('#appTable tbody tr');
+          rows.forEach(function(row){ if(row.dataset.name===d.student){row.dataset.status='تم القبول';row.querySelector('.status-cell').innerHTML='<span class="badge ba">تم القبول</span>';row.querySelector('.prog-cell').innerHTML='<strong>'+d.program+'</strong><br><span style="color:var(--muted)">'+d.university+'</span>';} });
+        } else {
+          html += '<tr style="background:#fefce8"><td>'+d.student+'</td><td>'+d.percentage+'%</td><td colspan="3" style="color:var(--muted)">لم يُقبل</td></tr>';
+        }
+      });
+      html += '</tbody></table></div>';
+    }
+    html += '</div>';
+    div.innerHTML = html;
+    refreshStats();
+    toast('تم قبول '+(s.accepted||0)+' طالب', 's');
+  });
+}
+function resetDist() {
+  if (!confirm('إعادة تعيين كل قرارات القبول؟')) return;
+  postJ('/api/reset-allocation/', {}).then(function(res) {
+    if (res.success) {
+      document.getElementById('distResult').innerHTML = '<div style="background:#d1fae5;border-radius:8px;padding:14px;color:#065f46">✅ تم إعادة تعيين '+res.reset_count+' طلب</div>';
+      document.querySelectorAll('#appTable tbody tr').forEach(function(row) {
+        if (row.dataset.status==='تم القبول') { row.dataset.status='يتم المراجعة'; row.querySelector('.status-cell').innerHTML='<span class="badge bp">يتم المراجعة</span>'; row.querySelector('.prog-cell').innerHTML='<span style="color:var(--muted)">—</span>'; }
+      });
+      refreshStats(); toast('تم إعادة التعيين', 's');
+    } else toast(res.error||'خطأ','e');
+  });
+}
+
+// ══════════════════════════════════════
+//  REFRESH STATS
+// ══════════════════════════════════════
 function refreshStats() {
   fetch('/api/statistics/').then(function(r){ return r.json(); }).then(function(d) {
     if (!d.success) return;
@@ -662,22 +1017,33 @@ function refreshStats() {
   });
 }
 
-// ── مساعدات ──
-function getCsrf() { var m = document.cookie.match(/csrftoken=([^;]+)/); return m ? m[1] : ''; }
-function postJSON(url, body) {
-  return fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrf() },
-    body: JSON.stringify(body)
-  }).then(function(r){ return r.json(); }).catch(function(){ return { success: false, error: 'خطأ في الشبكة' }; });
+// ══════════════════════════════════════
+//  PAGINATION
+// ══════════════════════════════════════
+function buildPag(containerId, pages, current, cb) {
+  var c = document.getElementById(containerId);
+  if (!c || pages <= 1) { if(c) c.innerHTML=''; return; }
+  var html = '<button '+(current<=1?'disabled':'')+' onclick="('+cb.toString()+')('+( current-1)+')">‹</button>';
+  for (var i=1; i<=pages; i++) {
+    html += '<button class="'+(i===current?'active':'')+'" onclick="('+cb.toString()+')('+i+')">'+i+'</button>';
+  }
+  html += '<button '+(current>=pages?'disabled':'')+' onclick="('+cb.toString()+')('+( current+1)+')">›</button>';
+  c.innerHTML = html;
 }
-var _toastTimer;
-function showToast(msg, type) {
+
+// ══════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════
+function getCsrf() { var m = document.cookie.match(/csrftoken=([^;]+)/); return m ? m[1] : ''; }
+function postJ(url, body) {
+  return fetch(url, { method:'POST', headers:{'Content-Type':'application/json','X-CSRFToken':getCsrf()}, body:JSON.stringify(body) })
+    .then(function(r){ return r.json(); }).catch(function(){ return {success:false,error:'خطأ في الشبكة'}; });
+}
+var _tt;
+function toast(msg, type) {
   var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = type ? ('show ' + type) : 'show';
-  clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(function(){ t.className = ''; }, 3500);
+  t.textContent = msg; t.className = type ? ('show '+type) : 'show';
+  clearTimeout(_tt); _tt = setTimeout(function(){ t.className=''; }, 3500);
 }
 </script>
 </body>

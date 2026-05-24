@@ -107,9 +107,7 @@ DATABASES = {
         'HOST': os.environ.get('DB_HOST', 'mysql-38adb648-gasimaboh732-1a0a.f.aivencloud.com'),
         'PORT': os.environ.get('DB_PORT', '15889'),
         'OPTIONS': {
-            'ssl': {
-                'ssl_mode': 'REQUIRED'
-            }
+            'ssl': {'ssl_mode': 'REQUIRED'}
         }
     }
 }
