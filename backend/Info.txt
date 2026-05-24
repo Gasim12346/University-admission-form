@@ -1,0 +1,40 @@
+/* Info Section */
+.nfo {
+    background: white;
+    padding: 3rem 0;
+    margin-top: 2rem;
+}
+
+.info h2 {
+    text-align: center;
+    color: #070707;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.info-item {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.info-item h4 {
+    color: #000000;
+    margin-bottom: 1rem;
+}
+
+.info-item ol,
+.info-item ul {
+    margin-right: 1.5rem;
+}
+
+.info-item li {
+    margin-bottom: 0.5rem;
+    color: #555;
+}
