@@ -1,6 +1,6 @@
 # urls.py — بوابة القبول الجامعي
 from django.urls import path
-from . import views
+from addmission_app import views 
 
 urlpatterns = [
     # ── الصفحات العامة ──
