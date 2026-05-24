@@ -257,7 +257,7 @@
         <p>جميع الحقوق محفوظة لوزارة التعليم العالي والبحث العلمي &copy; {% now "Y" %}</p>
     </footer>
 
-    <script>
+ <script>
     let finalChoices     = [];
     let currentTypeFilter = '';
 
@@ -301,7 +301,8 @@
     function loadPrograms() {
         const uniId = $('#universitySelect').val();
         if (!uniId) return;
-        fetch(`/get-programs/?university_id=${uniId}`)
+        // ✅ تم الإصلاح: استخدام مسار نسبي نظيف بدون شرطة مائلة بدائية مضللة
+        fetch(`get-programs/?university_id=${uniId}`)
             .then(res => res.json())
             .then(data => {
                 let html = '<option value="">-- اختر التخصص --</option>';
@@ -337,12 +338,12 @@
 
         $('#aiResultsList').html(
             '<div style="text-align:center;padding:20px;color:#4f46e5">' +
-   
             '<small style="color:#6b7280">جارٍ تحليل بياناتك وتوليد التوصيات...</small></p>' +
             '</div>'
         );
 
-        const url = window.location.origin + '/get-recommendations/'
+        // ✅ تم الإصلاح: استخدام مسار نسبي مباشر وتجنب window.location.origin لمنع مشاكل الـ CORS
+        const url = '/get-recommendations/'
             + '?pct='      + encodeURIComponent(pct)
             + '&field='    + encodeURIComponent(field)
             + '&type='     + encodeURIComponent(type)
@@ -352,7 +353,6 @@
         fetch(url)
             .then(function(res) { return res.json(); })
             .then(function(data) {
-                // إذا أرجع خطأ
                 if (data && data.error) {
                     $('#aiResultsList').html(
                         '<div style="background:#fee2e2;border-radius:8px;padding:12px 16px;color:#991b1b;font-size:.85rem">' +
@@ -371,7 +371,6 @@
 
                 window.tempAIResults = data;
 
-                // رأس النتائج
                 var primaryCount  = data.filter(function(d){ return !d.is_fallback; }).length;
                 var fallbackCount = data.filter(function(d){ return  d.is_fallback; }).length;
 
@@ -395,7 +394,6 @@
                         badge = '<span style="background:#ede9fe;color:#4f46e5;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:700"></span>';
                     }
 
-                    // شريط الاحتمالية — نخفيه للبدائل
                     var probBar = (!isFallback && item.prob > 0)
                         ? '<div style="margin-top:6px;background:#e5e7eb;border-radius:4px;height:5px;overflow:hidden">'
                           + '<div style="background:' + borderColor + ';height:100%;width:' + Math.min(item.prob * 3, 100) + '%"></div>'
@@ -435,9 +433,6 @@
         executeAdd(item.id || 0, item.pName || '', item.uName || '');
     }
 
-    // ✅ إصلاح رئيسي: executeAdd يحفظ id لا program_id
-    // (المشكلة كانت: executeAdd يحفظ {program_id, pName, uName}
-    //  لكن views.py يقرأ item.get('id') — الحل: نحفظ id)
     function executeAdd(id, pName, uName) {
         const isDuplicate = finalChoices.some(
             c => c.pName.trim() === pName.trim() && c.uName.trim() === uName.trim()
@@ -445,7 +440,6 @@
         if (isDuplicate) { alert("هذه الرغبة مضافة مسبقاً في قائمتك."); return; }
         if (finalChoices.length >= 20) { alert("الحد الأقصى 20 رغبة."); return; }
 
-        // ✅ الحفظ بـ 'id' وليس 'program_id'
         finalChoices.push({ id: id, pName: pName.trim(), uName: uName.trim() });
         renderChoices();
     }
@@ -479,7 +473,6 @@
         });
 
         $('#choicesCountDisplay').text(`${finalChoices.length}/20`);
-        // ✅ الـ JSON المحفوظ يحتوي على 'id' وهو ما يقرأه views.py
         $('#choices_data').val(JSON.stringify(finalChoices));
     }
 
@@ -517,9 +510,8 @@
             alert('الرجاء إضافة رغبة واحدة على الأقل');
             return;
         }
-        // تأكد من تحديث choices_data قبل الإرسال
         $('#choices_data').val(JSON.stringify(finalChoices));
     });
-    </script>
+</script>
 </body>
 </html>
