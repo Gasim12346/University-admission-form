@@ -24,9 +24,12 @@ SECRET_KEY = 'django-insecure-$r4la5il-m(p26nl1cn4-&ys045t@2ktncoe$2d(s$4@@sp#ym
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    'university-admission-form-1.onrender.com', 
+    '127.0.0.1', 
+    'localhost',
+    '.onrender.com'  # تضمن عمل الموقع حتى لو تغير رقم السيرفر فرعياً
+]
 
 # Application definition
 
